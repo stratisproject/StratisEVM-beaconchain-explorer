@@ -114,10 +114,20 @@ func main() {
 		utils.LogFatal(err, "error initializing bigtable", 0)
 	}
 
-	chainIDBig := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
-	rpcClient, err := rpc.NewLighthouseClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainIDBig)
-	if err != nil {
-		utils.LogFatal(err, "lighthouse client error", 0)
+	var rpcClient rpc.Client
+	chainID := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
+	if utils.Config.Indexer.Node.Type == "lighthouse" {
+		rpcClient, err = rpc.NewLighthouseClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer lighthouse client error", 0)
+		}
+	} else if utils.Config.Indexer.Node.Type == "prysm" {
+		rpcClient, err = rpc.NewPrysmClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer prysm client error", 0)
+		}
+	} else {
+		logrus.Fatalf("invalid note type %v specified. supported node types are prysm and lighthouse", utils.Config.Indexer.Node.Type)
 	}
 
 	erigonClient, err := rpc.NewErigonClient(utils.Config.Eth1ErigonEndpoint)
@@ -928,9 +938,20 @@ func debugBlocks() error {
 		return err
 	}
 
-	clClient, err := rpc.NewLighthouseClient(fmt.Sprintf("http://%v:%v", utils.Config.Indexer.Node.Host, utils.Config.Indexer.Node.Port), new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID))
-	if err != nil {
-		return err
+	var clClient rpc.Client
+	chainID := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
+	if utils.Config.Indexer.Node.Type == "lighthouse" {
+		clClient, err = rpc.NewLighthouseClient("http://"+utils.Config.Indexer.Node.Host+":"+utils.Config.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer lighthouse client error", 0)
+		}
+	} else if utils.Config.Indexer.Node.Type == "prysm" {
+		clClient, err = rpc.NewPrysmClient("http://"+utils.Config.Indexer.Node.Host+":"+utils.Config.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer prysm client error", 0)
+		}
+	} else {
+		logrus.Fatalf("invalid note type %v specified. supported node types are prysm and lighthouse", utils.Config.Indexer.Node.Type)
 	}
 
 	for i := opts.StartBlock; i <= opts.EndBlock; i++ {
@@ -1069,7 +1090,7 @@ func migrateLastAttestationSlotToBigtable() {
 	}
 }
 
-func updateAggreationBits(rpcClient *rpc.LighthouseClient, startEpoch uint64, endEpoch uint64, concurency uint64) {
+func updateAggreationBits(rpcClient rpc.Client, startEpoch uint64, endEpoch uint64, concurency uint64) {
 	logrus.Infof("update-aggregation-bits epochs %v - %v", startEpoch, endEpoch)
 	for epoch := startEpoch; epoch <= endEpoch; epoch++ {
 		logrus.Infof("Getting data from the node for epoch %v", epoch)

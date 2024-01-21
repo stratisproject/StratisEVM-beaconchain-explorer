@@ -23,11 +23,11 @@ import (
 	"github.com/prysmaticlabs/go-bitfield"
 )
 
-// LighthouseLatestHeadEpoch is used to cache the latest head epoch for participation requests
-var LighthouseLatestHeadEpoch uint64 = 0
+// PrysmLatestHeadEpoch is used to cache the latest head epoch for participation requests
+var PrysmLatestHeadEpoch uint64 = 0
 
-// LighthouseClient holds the Lighthouse client info
-type LighthouseClient struct {
+// PrysmClient holds the Prysm client info
+type PrysmClient struct {
 	endpoint            string
 	assignmentsCache    *lru.Cache
 	assignmentsCacheMux *sync.Mutex
@@ -36,11 +36,11 @@ type LighthouseClient struct {
 	signer              gtypes.Signer
 }
 
-// NewLighthouseClient is used to create a new Lighthouse client
-func NewLighthouseClient(endpoint string, chainID *big.Int) (*LighthouseClient, error) {
-	logger.Infof("initializing lighthouse client at %v", endpoint)
+// NewPrysmClient is used to create a new Prysm client
+func NewPrysmClient(endpoint string, chainID *big.Int) (*PrysmClient, error) {
+	logger.Infof("initializing prysm client at %v", endpoint)
 	signer := gtypes.NewCancunSigner(chainID)
-	client := &LighthouseClient{
+	client := &PrysmClient{
 		endpoint:            endpoint,
 		assignmentsCacheMux: &sync.Mutex{},
 		slotsCacheMux:       &sync.Mutex{},
@@ -52,7 +52,7 @@ func NewLighthouseClient(endpoint string, chainID *big.Int) (*LighthouseClient, 
 	return client, nil
 }
 
-func (lc *LighthouseClient) GetNewBlockChan() chan *types.Block {
+func (lc *PrysmClient) GetNewBlockChan() chan *types.Block {
 	blkCh := make(chan *types.Block, 10)
 	go func() {
 		stream, err := eventsource.Subscribe(fmt.Sprintf("%s/eth/v1/events?topics=head", lc.endpoint), "")
@@ -66,7 +66,7 @@ func (lc *LighthouseClient) GetNewBlockChan() chan *types.Block {
 			select {
 			// It is important to register to Errors, otherwise the stream does not reconnect if the connection was lost
 			case err := <-stream.Errors:
-				utils.LogError(err, "Lighthouse connection error (will automatically retry to connect)", 0)
+				utils.LogError(err, "Prysm connection error (will automatically retry to connect)", 0)
 			case e := <-stream.Events:
 				// logger.Infof("retrieved %v via event stream", e.Data())
 				var parsed StreamedBlockEventData
@@ -91,8 +91,8 @@ func (lc *LighthouseClient) GetNewBlockChan() chan *types.Block {
 	return blkCh
 }
 
-// GetChainHead gets the chain head from Lighthouse
-func (lc *LighthouseClient) GetChainHead() (*types.ChainHead, error) {
+// GetChainHead gets the chain head from Prysm
+func (lc *PrysmClient) GetChainHead() (*types.ChainHead, error) {
 	headResp, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/headers/head", lc.endpoint))
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving chain head: %w", err)
@@ -104,7 +104,7 @@ func (lc *LighthouseClient) GetChainHead() (*types.ChainHead, error) {
 		return nil, fmt.Errorf("error parsing chain head: %w", err)
 	}
 
-	id := parsedHead.Data.Header.Message.StateRoot
+	id := fmt.Sprintf("%d", parsedHead.Data.Header.Message.Slot)
 	if parsedHead.Data.Header.Message.Slot == 0 {
 		id = "genesis"
 	}
@@ -145,7 +145,7 @@ func (lc *LighthouseClient) GetChainHead() (*types.ChainHead, error) {
 	}, nil
 }
 
-func (lc *LighthouseClient) GetValidatorQueue() (*types.ValidatorQueue, error) {
+func (lc *PrysmClient) GetValidatorQueue() (*types.ValidatorQueue, error) {
 	// pre-filter the status, to return much less validators, thus much faster!
 	validatorsResp, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/states/head/validators?status=pending_queued,active_exiting,active_slashed", lc.endpoint))
 	if err != nil {
@@ -169,8 +169,8 @@ func (lc *LighthouseClient) GetValidatorQueue() (*types.ValidatorQueue, error) {
 	}, nil
 }
 
-// GetEpochAssignments will get the epoch assignments from Lighthouse RPC api
-func (lc *LighthouseClient) GetEpochAssignments(epoch uint64) (*types.EpochAssignments, error) {
+// GetEpochAssignments will get the epoch assignments from Prysm RPC api
+func (lc *PrysmClient) GetEpochAssignments(epoch uint64) (*types.EpochAssignments, error) {
 
 	var err error
 
@@ -192,8 +192,12 @@ func (lc *LighthouseClient) GetEpochAssignments(epoch uint64) (*types.EpochAssig
 		return nil, fmt.Errorf("error parsing proposer duties: %w", err)
 	}
 
+	id := parsedProposerResponse.DependentRoot
+	if epoch == 0 && id == "0x0000000000000000000000000000000000000000000000000000000000000000" {
+		id = "genesis"
+	}
 	// fetch the block root that the proposer data is dependent on
-	headerResp, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/headers/%s", lc.endpoint, parsedProposerResponse.DependentRoot))
+	headerResp, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/headers/%s", lc.endpoint, id))
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving chain header: %w", err)
 	}
@@ -202,7 +206,11 @@ func (lc *LighthouseClient) GetEpochAssignments(epoch uint64) (*types.EpochAssig
 	if err != nil {
 		return nil, fmt.Errorf("error parsing chain header: %w", err)
 	}
-	depStateRoot := parsedHeader.Data.Header.Message.StateRoot
+
+	depStateRoot := fmt.Sprintf("%d", parsedHeader.Data.Header.Message.Slot)
+	if epoch == 0 {
+		depStateRoot = "genesis"
+	}
 
 	// Now use the state root to make a consistent committee query
 	committeesResp, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/states/%s/committees?epoch=%d", lc.endpoint, depStateRoot, epoch))
@@ -267,8 +275,8 @@ func (lc *LighthouseClient) GetEpochAssignments(epoch uint64) (*types.EpochAssig
 	return assignments, nil
 }
 
-// GetEpochProposerAssignments will get the epoch proposer assignments from Lighthouse RPC api
-func (lc *LighthouseClient) GetEpochProposerAssignments(epoch uint64) (*StandardProposerDutiesResponse, error) {
+// GetEpochProposerAssignments will get the epoch proposer assignments from Prysm RPC api
+func (lc *PrysmClient) GetEpochProposerAssignments(epoch uint64) (*StandardProposerDutiesResponse, error) {
 	var err error
 
 	proposerResp, err := lc.get(fmt.Sprintf("%s/eth/v1/validator/duties/proposer/%d", lc.endpoint, epoch))
@@ -284,7 +292,7 @@ func (lc *LighthouseClient) GetEpochProposerAssignments(epoch uint64) (*Standard
 	return parsedProposerResponse, nil
 }
 
-func (lc *LighthouseClient) GetValidatorState(epoch uint64) (*StandardValidatorsResponse, error) {
+func (lc *PrysmClient) GetValidatorState(epoch uint64) (*StandardValidatorsResponse, error) {
 	validatorsResp, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/states/%d/validators", lc.endpoint, epoch*utils.Config.Chain.ClConfig.SlotsPerEpoch))
 	if err != nil && epoch == 0 {
 		validatorsResp, err = lc.get(fmt.Sprintf("%s/eth/v1/beacon/states/%v/validators", lc.endpoint, "genesis"))
@@ -304,8 +312,8 @@ func (lc *LighthouseClient) GetValidatorState(epoch uint64) (*StandardValidators
 	return parsedValidators, nil
 }
 
-// GetEpochData will get the epoch data from Lighthouse RPC api
-func (lc *LighthouseClient) GetEpochData(epoch uint64, skipHistoricBalances bool) (*types.EpochData, error) {
+// GetEpochData will get the epoch data from Prysm RPC api
+func (lc *PrysmClient) GetEpochData(epoch uint64, skipHistoricBalances bool) (*types.EpochData, error) {
 	wg := &errgroup.Group{}
 	mux := &sync.Mutex{}
 
@@ -563,7 +571,7 @@ func (lc *LighthouseClient) GetEpochData(epoch uint64, skipHistoricBalances bool
 	return data, nil
 }
 
-func (lc *LighthouseClient) GetBalancesForEpoch(epoch int64) (map[uint64]uint64, error) {
+func (lc *PrysmClient) GetBalancesForEpoch(epoch int64) (map[uint64]uint64, error) {
 
 	if epoch < 0 {
 		epoch = 0
@@ -596,7 +604,7 @@ func (lc *LighthouseClient) GetBalancesForEpoch(epoch int64) (map[uint64]uint64,
 	return validatorBalances, nil
 }
 
-func (lc *LighthouseClient) GetBlockByBlockroot(blockroot []byte) (*types.Block, error) {
+func (lc *PrysmClient) GetBlockByBlockroot(blockroot []byte) (*types.Block, error) {
 	resHeaders, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/headers/0x%x", lc.endpoint, blockroot))
 	if err != nil {
 		if err == errNotFound {
@@ -628,8 +636,8 @@ func (lc *LighthouseClient) GetBlockByBlockroot(blockroot []byte) (*types.Block,
 	return lc.blockFromResponse(&parsedHeaders, &parsedResponse)
 }
 
-// GetBlockHeader will get the block header by slot from Lighthouse RPC api
-func (lc *LighthouseClient) GetBlockHeader(slot uint64) (*StandardBeaconHeaderResponse, error) {
+// GetBlockHeader will get the block header by slot from Prysm RPC api
+func (lc *PrysmClient) GetBlockHeader(slot uint64) (*StandardBeaconHeaderResponse, error) {
 	var parsedHeaders *StandardBeaconHeaderResponse
 
 	resHeaders, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/headers/%d", lc.endpoint, slot))
@@ -671,8 +679,8 @@ func (lc *LighthouseClient) GetBlockHeader(slot uint64) (*StandardBeaconHeaderRe
 	return parsedHeaders, nil
 }
 
-// GetBlocksBySlot will get the blocks by slot from Lighthouse RPC api
-func (lc *LighthouseClient) GetBlockBySlot(slot uint64) (*types.Block, error) {
+// GetBlocksBySlot will get the blocks by slot from Prysm RPC api
+func (lc *PrysmClient) GetBlockBySlot(slot uint64) (*types.Block, error) {
 	epoch := slot / utils.Config.Chain.ClConfig.SlotsPerEpoch
 	isFirstSlotOfEpoch := slot%utils.Config.Chain.ClConfig.SlotsPerEpoch == 0
 
@@ -868,7 +876,7 @@ func (lc *LighthouseClient) GetBlockBySlot(slot uint64) (*types.Block, error) {
 	return block, nil
 }
 
-func (lc *LighthouseClient) blockFromResponse(parsedHeaders *StandardBeaconHeaderResponse, parsedResponse *StandardV2BlockResponse) (*types.Block, error) {
+func (lc *PrysmClient) blockFromResponse(parsedHeaders *StandardBeaconHeaderResponse, parsedResponse *StandardV2BlockResponse) (*types.Block, error) {
 	parsedBlock := parsedResponse.Data
 	slot := uint64(parsedHeaders.Data.Header.Message.Slot)
 	block := &types.Block{
@@ -1018,8 +1026,8 @@ func (lc *LighthouseClient) blockFromResponse(parsedHeaders *StandardBeaconHeade
 		}
 	}
 
-	// TODO: this is legacy from old lighthouse API. Does it even still apply?
-	if block.Eth1Data.DepositCount > 2147483647 { // Sometimes the lighthouse node does return bogus data for the DepositCount value
+	// TODO: this is legacy from old prysm API. Does it even still apply?
+	if block.Eth1Data.DepositCount > 2147483647 { // Sometimes the prysm node does return bogus data for the DepositCount value
 		block.Eth1Data.DepositCount = 0
 	}
 
@@ -1162,8 +1170,8 @@ func (lc *LighthouseClient) blockFromResponse(parsedHeaders *StandardBeaconHeade
 	return block, nil
 }
 
-// GetValidatorParticipation will get the validator participation from the Lighthouse RPC api
-func (lc *LighthouseClient) GetValidatorParticipation(epoch uint64) (*types.ValidatorParticipation, error) {
+// GetValidatorParticipation will get the validator participation from the Prysm RPC api
+func (lc *PrysmClient) GetValidatorParticipation(epoch uint64) (*types.ValidatorParticipation, error) {
 
 	head, err := lc.GetChainHead()
 	if err != nil {
@@ -1171,7 +1179,7 @@ func (lc *LighthouseClient) GetValidatorParticipation(epoch uint64) (*types.Vali
 	}
 
 	if epoch > head.HeadEpoch {
-		return nil, fmt.Errorf("epoch %v is newer than the latest head %v", epoch, LighthouseLatestHeadEpoch)
+		return nil, fmt.Errorf("epoch %v is newer than the latest head %v", epoch, PrysmLatestHeadEpoch)
 	}
 	if epoch == head.HeadEpoch {
 		// participation stats are calculated at the end of an epoch,
@@ -1187,12 +1195,12 @@ func (lc *LighthouseClient) GetValidatorParticipation(epoch uint64) (*types.Vali
 
 	logger.Infof("requesting validator inclusion data for epoch %v", request_epoch)
 
-	resp, err := lc.get(fmt.Sprintf("%s/lighthouse/validator_inclusion/%d/global", lc.endpoint, request_epoch))
+	resp, err := lc.get(fmt.Sprintf("%s/eth/v1alpha1/validators/participation?epoch=%d", lc.endpoint, request_epoch))
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving validator participation data for epoch %v: %w", request_epoch, err)
 	}
 
-	var parsedResponse LighthouseValidatorParticipationResponse
+	var parsedResponse PrysmValidatorParticipationResponse
 	err = json.Unmarshal(resp, &parsedResponse)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing validator participation data for epoch %v: %w", epoch, err)
@@ -1203,24 +1211,24 @@ func (lc *LighthouseClient) GetValidatorParticipation(epoch uint64) (*types.Vali
 		// we requested the next epoch, so we have to use the previous value for everything here
 		res = &types.ValidatorParticipation{
 			Epoch:                   epoch,
-			GlobalParticipationRate: float32(parsedResponse.Data.PreviousEpochTargetAttestingGwei) / float32(parsedResponse.Data.PreviousEpochActiveGwei),
-			VotedEther:              uint64(parsedResponse.Data.PreviousEpochTargetAttestingGwei),
-			EligibleEther:           uint64(parsedResponse.Data.PreviousEpochActiveGwei),
+			GlobalParticipationRate: float32(parsedResponse.Participation.PreviousEpochTargetAttestingGwei) / float32(parsedResponse.Participation.PreviousEpochActiveGwei),
+			VotedEther:              uint64(parsedResponse.Participation.PreviousEpochTargetAttestingGwei),
+			EligibleEther:           uint64(parsedResponse.Participation.PreviousEpochActiveGwei),
 			Finalized:               epoch <= head.FinalizedEpoch && head.JustifiedEpoch > 0,
 		}
 	} else {
 		res = &types.ValidatorParticipation{
 			Epoch:                   epoch,
-			GlobalParticipationRate: float32(parsedResponse.Data.CurrentEpochTargetAttestingGwei) / float32(parsedResponse.Data.CurrentEpochActiveGwei),
-			VotedEther:              uint64(parsedResponse.Data.CurrentEpochTargetAttestingGwei),
-			EligibleEther:           uint64(parsedResponse.Data.CurrentEpochActiveGwei),
+			GlobalParticipationRate: float32(parsedResponse.Participation.CurrentEpochTargetAttestingGwei) / float32(parsedResponse.Participation.CurrentEpochActiveGwei),
+			VotedEther:              uint64(parsedResponse.Participation.CurrentEpochTargetAttestingGwei),
+			EligibleEther:           uint64(parsedResponse.Participation.CurrentEpochActiveGwei),
 			Finalized:               epoch <= head.FinalizedEpoch && head.JustifiedEpoch > 0,
 		}
 	}
 	return res, nil
 }
 
-func (lc *LighthouseClient) GetSyncCommittee(stateID string, epoch uint64) (*StandardSyncCommittee, error) {
+func (lc *PrysmClient) GetSyncCommittee(stateID string, epoch uint64) (*StandardSyncCommittee, error) {
 	syncCommitteesResp, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/states/%s/sync_committees?epoch=%d", lc.endpoint, stateID, epoch))
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving sync_committees for epoch %v (state: %v): %w", epoch, stateID, err)
@@ -1233,7 +1241,7 @@ func (lc *LighthouseClient) GetSyncCommittee(stateID string, epoch uint64) (*Sta
 	return &parsedSyncCommittees.Data, nil
 }
 
-func (lc *LighthouseClient) GetBlobSidecars(stateID string) (*StandardBlobSidecarsResponse, error) {
+func (lc *PrysmClient) GetBlobSidecars(stateID string) (*StandardBlobSidecarsResponse, error) {
 	res, err := lc.get(fmt.Sprintf("%s/eth/v1/beacon/blob_sidecars/%s", lc.endpoint, stateID))
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving blob_sidecars for %v: %w", stateID, err)
@@ -1246,7 +1254,7 @@ func (lc *LighthouseClient) GetBlobSidecars(stateID string) (*StandardBlobSideca
 	return &parsed, nil
 }
 
-func (lc *LighthouseClient) get(url string) ([]byte, error) {
+func (lc *PrysmClient) get(url string) ([]byte, error) {
 	// t0 := time.Now()
 	// defer func() { fmt.Println(url, time.Since(t0)) }()
 	client := &http.Client{Timeout: time.Minute * 2}
@@ -1258,7 +1266,6 @@ func (lc *LighthouseClient) get(url string) ([]byte, error) {
 	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
-
 	if resp.StatusCode != http.StatusOK {
 		if resp.StatusCode == http.StatusNotFound {
 			return nil, errNotFound
@@ -1269,12 +1276,19 @@ func (lc *LighthouseClient) get(url string) ([]byte, error) {
 	return data, err
 }
 
-type LighthouseValidatorParticipationResponse struct {
-	Data struct {
-		CurrentEpochActiveGwei           uint64Str `json:"current_epoch_active_gwei"`
-		PreviousEpochActiveGwei          uint64Str `json:"previous_epoch_active_gwei"`
-		CurrentEpochTargetAttestingGwei  uint64Str `json:"current_epoch_target_attesting_gwei"`
-		PreviousEpochTargetAttestingGwei uint64Str `json:"previous_epoch_target_attesting_gwei"`
-		PreviousEpochHeadAttestingGwei   uint64Str `json:"previous_epoch_head_attesting_gwei"`
-	} `json:"data"`
+type PrysmValidatorParticipationResponse struct {
+	Epoch         uint64Str `json:"epoch"`
+	Finalized     bool      `json:"finalized"`
+	Participation struct {
+		CurrentEpochActiveGwei           uint64Str `json:"currentEpochActiveGwei"`
+		CurrentEpochAttestingGwei        uint64Str `json:"currentEpochAttestingGwei"`
+		CurrentEpochTargetAttestingGwei  uint64Str `json:"currentEpochTargetAttestingGwei"`
+		EligibleEther                    uint64Str `json:"eligibleEther"`
+		GlobalParticipationRate          float64   `json:"globalParticipationRate"`
+		PreviousEpochActiveGwei          uint64Str `json:"previousEpochActiveGwei"`
+		PreviousEpochAttestingGwei       uint64Str `json:"previousEpochAttestingGwei"`
+		PreviousEpochHeadAttestingGwei   uint64Str `json:"previousEpochHeadAttestingGwei"`
+		PreviousEpochTargetAttestingGwei uint64Str `json:"previousEpochTargetAttestingGwei"`
+		VotedEther                       uint64Str `json:"votedEther"`
+	} `json:"participation"`
 }

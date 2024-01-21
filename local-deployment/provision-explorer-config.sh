@@ -1,18 +1,24 @@
 #! /bin/bash
-CL_PORT=$(kurtosis enclave inspect my-testnet | grep 4000/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/http\:\/\/127.0.0.1\://' | head -n 1)
-echo "CL Node port is $CL_PORT"
+# CL_PORT=$(kurtosis enclave inspect my-testnet | grep 4000/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/http\:\/\/127.0.0.1\://' | head -n 1)
+# echo "CL Node port is $CL_PORT"
 
-EL_PORT=$(kurtosis enclave inspect my-testnet | grep 8545/tcp | tr -s ' ' | cut -d " " -f 5 | sed -e 's/127.0.0.1\://' | head -n 1)
-echo "EL Node port is $EL_PORT"
+# EL_PORT=$(kurtosis enclave inspect my-testnet | grep 8545/tcp | tr -s ' ' | cut -d " " -f 5 | sed -e 's/127.0.0.1\://' | head -n 1)
+# echo "EL Node port is $EL_PORT"
 
-REDIS_PORT=$(kurtosis enclave inspect my-testnet | grep 6379/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/tcp\:\/\/127.0.0.1\://' | head -n 1)
-echo "Redis port is $REDIS_PORT"
+# REDIS_PORT=$(kurtosis enclave inspect my-testnet | grep 6379/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/tcp\:\/\/127.0.0.1\://' | head -n 1)
+# echo "Redis port is $REDIS_PORT"
 
-POSTGRES_PORT=$(kurtosis enclave inspect my-testnet | grep 5432/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/postgresql\:\/\/127.0.0.1\://' | head -n 1)
-echo "Postgres port is $POSTGRES_PORT"
+# POSTGRES_PORT=$(kurtosis enclave inspect my-testnet | grep 5432/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/postgresql\:\/\/127.0.0.1\://' | head -n 1)
+# echo "Postgres port is $POSTGRES_PORT"
 
-LBT_PORT=$(kurtosis enclave inspect my-testnet | grep 9000/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/tcp\:\/\/127.0.0.1\://' | tail -n 1)
-echo "Little bigtable port is $LBT_PORT"
+# LBT_PORT=$(kurtosis enclave inspect my-testnet | grep 9000/tcp | tr -s ' ' | cut -d " " -f 6 | sed -e 's/tcp\:\/\/127.0.0.1\://' | tail -n 1)
+# echo "Little bigtable port is $LBT_PORT"
+
+CL_PORT=3500
+EL_PORT=8545
+REDIS_PORT=6379
+POSTGRES_PORT=5432
+LBT_PORT=8086
 
 cat <<EOF > .env
 CL_PORT=$CL_PORT
@@ -25,8 +31,25 @@ EOF
 touch elconfig.json
 cat >elconfig.json <<EOL
 {
-    "byzantiumBlock": 0,
-    "constantinopleBlock": 0
+  "chainId": 205205,
+  "homesteadBlock": 0,
+  "daoForkSupport": true,
+  "eip150Block": 0,
+  "eip155Block": 0,
+  "eip158Block": 0,
+  "byzantiumBlock": 0,
+  "constantinopleBlock": 0,
+  "petersburgBlock": 0,
+  "istanbulBlock": 0,
+  "muirGlacierBlock": 0,
+  "berlinBlock": 0,
+  "londonBlock": 0,
+  "arrowGlacierBlock": 0,
+  "grayGlacierBlock": 0,
+  "shanghaiTime": 1705497931,
+  "cancunTime": 1705497931,
+  "terminalTotalDifficulty": 0,
+  "terminalTotalDifficultyPassed": true
 }
 EOL
 
@@ -37,17 +60,17 @@ chain:
   clConfigPath: 'node'
   elConfigPath: 'local-deployment/elconfig.json'
 readerDatabase:
-  name: db
+  name: explorer
   host: 127.0.0.1
   port: "$POSTGRES_PORT"
   user: postgres
-  password: "pass"
+  password: "test"
 writerDatabase:
-  name: db
+  name: explorer
   host: 127.0.0.1
   port: "$POSTGRES_PORT"
   user: postgres
-  password: "pass"
+  password: "test"
 bigtable:
   project: explorer
   instance: explorer
@@ -65,17 +88,17 @@ frontend:
     host: '0.0.0.0' # Address to listen on
     port: '8080' # Port to listen on
   readerDatabase:
-    name: db
+    name: explorer
     host: 127.0.0.1
     port: "$POSTGRES_PORT"
     user: postgres
-    password: "pass"
+    password: "test"
   writerDatabase:
-    name: db
+    name: explorer
     host: 127.0.0.1
     port: "$POSTGRES_PORT"
     user: postgres
-    password: "pass"
+    password: "test"
   sessionSecret: "11111111111111111111111111111111"
   jwtSigningSecret: "1111111111111111111111111111111111111111111111111111111111111111"
   jwtIssuer: "localhost"
@@ -98,21 +121,10 @@ indexer:
   node:
     host: 127.0.0.1
     port: '$CL_PORT'
-    type: lighthouse
+    type: prysm
   eth1DepositContractFirstBlock: 0
 EOL
 
 echo "generated config written to config.yml"
 
-echo "initializing bigtable schema"
-PROJECT="explorer"
-INSTANCE="explorer"
-HOST="127.0.0.1:$LBT_PORT"
-cd ..
-go run ./cmd/misc/main.go -config local-deployment/config.yml -command initBigtableSchema
-
-echo "bigtable schema initialization completed"
-
-echo "provisioning postgres db schema"
-go run ./cmd/misc/main.go -config local-deployment/config.yml -command applyDbSchema
-echo "postgres db schema initialization completed"
+bash init-schema.sh

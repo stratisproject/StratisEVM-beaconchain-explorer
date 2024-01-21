@@ -24,6 +24,9 @@ services:
   rewards-exporter:
     <<: *default-service
     command: go run ./cmd/rewards-exporter -config /app/local-deployment/config.yml
+  ethstore-exporter:
+    <<: *default-service
+    command: go run ./cmd/ethstore-exporter -config /app/local-deployment/config.yml
   statistics:
     <<: *default-service
     command: go run ./cmd/statistics -config /app/local-deployment/config.yml --charts.enabled --graffiti.enabled -validators.enabled

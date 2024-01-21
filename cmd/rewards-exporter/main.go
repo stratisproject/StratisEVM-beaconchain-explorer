@@ -218,7 +218,6 @@ func export(epoch uint64, bt *db.Bigtable, client *beacon.Client, elClient *stri
 	logrus.Infof("retrieving rewards details for epoch %v", epoch)
 
 	rewards, err := eth_rewards.GetRewardsForEpoch(epoch, client, *elClient)
-
 	if err != nil {
 		return fmt.Errorf("error retrieving reward details for epoch %v: %v", epoch, err)
 	} else {

@@ -122,12 +122,16 @@ func main() {
 	}
 
 	var rpcClient rpc.Client
-
 	chainID := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
 	if utils.Config.Indexer.Node.Type == "lighthouse" {
 		rpcClient, err = rpc.NewLighthouseClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
 		if err != nil {
 			utils.LogFatal(err, "new explorer lighthouse client error", 0)
+		}
+	} else if utils.Config.Indexer.Node.Type == "prysm" {
+		rpcClient, err = rpc.NewPrysmClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer prysm client error", 0)
 		}
 	} else {
 		logrus.Fatalf("invalid note type %v specified. supported node types are prysm and lighthouse", utils.Config.Indexer.Node.Type)

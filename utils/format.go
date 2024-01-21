@@ -967,8 +967,12 @@ func FormatPercentageWithGPrecision(percentage float64, precision int) string {
 // FormatPublicKey will return html formatted text for a validator-public-key
 func FormatPublicKey(validator []byte) template.HTML {
 	copyBtn := CopyButton(hex.EncodeToString(validator))
+	validatorHex := hex.EncodeToString(validator)
+	if len(validatorHex) > 6 {
+		validatorHex = validatorHex[:6]
+	}
 	// return template.HTML(fmt.Sprintf("<i class=\"fas fa-male\"></i> <a href=\"/validator/0x%x\">%v</a>", validator, FormatHash(validator)))
-	return template.HTML(fmt.Sprintf(`<i class="fas fa-male mr-2"></i><a style="font-family: 'Roboto Mono'" href="/validator/0x%x">0x%v…</a>%v`, validator, hex.EncodeToString(validator)[:6], copyBtn))
+	return template.HTML(fmt.Sprintf(`<i class="fas fa-male mr-2"></i><a style="font-family: 'Roboto Mono'" href="/validator/0x%x">0x%v…</a>%v`, validator, validatorHex, copyBtn))
 }
 
 func FormatMachineName(machineName string) template.HTML {

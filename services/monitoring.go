@@ -173,7 +173,12 @@ func startApiMonitoringService() {
 		Timeout: time.Second * 10,
 	}
 
-	url := "https://" + utils.Config.Frontend.SiteDomain + "/api/v1/epoch/latest"
+	url := utils.Config.Frontend.SiteDomain + "/api/v1/epoch/latest"
+	if utils.Config.Frontend.SiteSSL {
+		url = "https://" + url
+	} else {
+		url = "http://" + url
+	}
 	// add apikey (if any) to url but don't log the api key when errors occur
 	errFields := map[string]interface{}{
 		"url": url}
@@ -212,7 +217,12 @@ func startAppMonitoringService() {
 		Timeout: time.Second * 10,
 	}
 
-	url := "https://" + utils.Config.Frontend.SiteDomain + "/api/v1/app/dashboard"
+	url := utils.Config.Frontend.SiteDomain + "/api/v1/app/dashboard"
+	if utils.Config.Frontend.SiteSSL {
+		url = "https://" + url
+	} else {
+		url = "http://" + url
+	}
 	// add apikey (if any) to url but don't log the api key when errors occur
 	errFields := map[string]interface{}{
 		"url": url}

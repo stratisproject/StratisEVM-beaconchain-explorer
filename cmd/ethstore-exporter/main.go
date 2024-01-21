@@ -82,6 +82,13 @@ func main() {
 		endDayReexport = *dayToReexport
 	}
 
+	if *bnAddress == "" {
+		*bnAddress = "http://" + cfg.Indexer.Node.Host + ":" + cfg.Indexer.Node.Port
+	}
+	if *enAddress == "" {
+		*enAddress = cfg.Eth1GethEndpoint
+	}
+
 	exporter.StartEthStoreExporter(*bnAddress, *enAddress, *updateInterval, *errorInterval, *sleepInterval, startDayReexport, endDayReexport)
 	logrus.Println("exiting...")
 }

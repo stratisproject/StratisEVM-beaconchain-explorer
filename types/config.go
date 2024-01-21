@@ -100,6 +100,7 @@ type Config struct {
 			PrivacyPolicyUrl  string `yaml:"privacyPolicyUrl" envconfig:"FRONTEND_LEGAL_PRIVACY_POLICY_URL"`
 			ImprintTemplate   string `yaml:"imprintTemplate" envconfig:"FRONTEND_LEGAL_IMPRINT_TEMPLATE"`
 		} `yaml:"legal"`
+		SiteSSL      bool   `yaml:"siteSSL" envconfig:"FRONTEND_SITE_SSL"`
 		SiteDomain   string `yaml:"siteDomain" envconfig:"FRONTEND_SITE_DOMAIN"`
 		SiteName     string `yaml:"siteName" envconfig:"FRONTEND_SITE_NAME"`
 		SiteTitle    string `yaml:"siteTitle" envconfig:"FRONTEND_SITE_TITLE"`

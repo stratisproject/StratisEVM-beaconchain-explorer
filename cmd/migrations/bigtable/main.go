@@ -88,11 +88,20 @@ func main() {
 	defer db.FrontendReaderDB.Close()
 	defer db.FrontendWriterDB.Close()
 
-	chainIDBig := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
-
-	rpcClient, err := rpc.NewLighthouseClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainIDBig)
-	if err != nil {
-		utils.LogFatal(err, "new bigtable lighthouse client error", 0)
+	var rpcClient rpc.Client
+	chainID := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
+	if utils.Config.Indexer.Node.Type == "lighthouse" {
+		rpcClient, err = rpc.NewLighthouseClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer lighthouse client error", 0)
+		}
+	} else if utils.Config.Indexer.Node.Type == "prysm" {
+		rpcClient, err = rpc.NewPrysmClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer prysm client error", 0)
+		}
+	} else {
+		logrus.Fatalf("invalid note type %v specified. supported node types are prysm and lighthouse", utils.Config.Indexer.Node.Type)
 	}
 
 	gOuter := errgroup.Group{}
@@ -197,12 +206,20 @@ func monitor(configPath string) {
 	}
 	defer bt.Close()
 
-	chainIDBig := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
-
 	var rpcClient rpc.Client
-	rpcClient, err = rpc.NewLighthouseClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainIDBig)
-	if err != nil {
-		utils.LogFatal(err, "new bigtable lighthouse client in monitor error", 0)
+	chainID := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)
+	if utils.Config.Indexer.Node.Type == "lighthouse" {
+		rpcClient, err = rpc.NewLighthouseClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer lighthouse client error", 0)
+		}
+	} else if utils.Config.Indexer.Node.Type == "prysm" {
+		rpcClient, err = rpc.NewPrysmClient("http://"+cfg.Indexer.Node.Host+":"+cfg.Indexer.Node.Port, chainID)
+		if err != nil {
+			utils.LogFatal(err, "new explorer prysm client error", 0)
+		}
+	} else {
+		logrus.Fatalf("invalid note type %v specified. supported node types are prysm and lighthouse", utils.Config.Indexer.Node.Type)
 	}
 	current := uint64(0)
 

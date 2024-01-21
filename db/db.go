@@ -1867,7 +1867,10 @@ func GetSlotVizData(latestEpoch uint64) ([]*types.SlotVizEpochs, error) {
 			ELSE 'unknown'
 		END AS status,
 		b.epoch,
-		COALESCE(e.globalparticipationrate, 0) AS globalparticipationrate,
+		CASE
+			WHEN e.globalparticipationrate = double precision 'NaN' THEN 0
+			ELSE COALESCE(e.globalparticipationrate, 0)
+		END AS globalparticipationrate,
 		(b.epoch <= $2) AS finalized
 	FROM blocks b
 		LEFT JOIN epochs e ON e.epoch = b.epoch

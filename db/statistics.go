@@ -1057,7 +1057,7 @@ func gatherValidatorMissedAttestationsStatisticsForDay(validators []uint64, day 
 
 			// logger.Infof("seeding validator duties for epoch %v", epoch)
 			for _, validator := range validators {
-				if activityData[validator].ActivationEpoch <= epoch && epoch < activityData[validator].ExitEpoch {
+				if len(activityData) > 0 && activityData[validator].ActivationEpoch <= epoch && epoch < activityData[validator].ExitEpoch {
 					epochParticipation[epoch][types.ValidatorIndex(validator)] = false
 				}
 			}

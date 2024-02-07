@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	ethstore "github.com/gobitfly/eth.store"
+	ethstore "github.com/SergeevDmitry/eth.store"
 	"github.com/jmoiron/sqlx"
 	"github.com/shopspring/decimal"
 )

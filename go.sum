@@ -92,8 +92,8 @@ github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0
 github.com/Microsoft/go-winio v0.6.1 h1:9/kr64B9VUZrLm5YYwbGtUJnMgqWVOdUAXu6Migciow=
 github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5+sAH+4kjUM=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
-github.com/SergeevDmitry/eth.store v0.0.0-20240207145246-e6dab0e419b6 h1:jLmpjo3N1tqEIZ8ZhuU2X3ekyQJ4Yrzh3lUxQdeKl24=
-github.com/SergeevDmitry/eth.store v0.0.0-20240207145246-e6dab0e419b6/go.mod h1:n/jFGHLcgE6xijvG1Rq72BnWhzZY7C1oJOcYzsKqebo=
+github.com/SergeevDmitry/eth.store v0.0.0-20240207181457-302d43d1f4b0 h1:LXGXwkv8wVNHV7w8zNtz4gbruCjnx6X1l29xPQFOjDI=
+github.com/SergeevDmitry/eth.store v0.0.0-20240207181457-302d43d1f4b0/go.mod h1:n/jFGHLcgE6xijvG1Rq72BnWhzZY7C1oJOcYzsKqebo=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=

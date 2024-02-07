@@ -35,19 +35,21 @@ var currencies = map[string]struct {
 	Symbol string
 	Label  string
 }{
-	"AUD":  {"A$", "Australian Dollar"},
-	"CAD":  {"C$", "Canadian Dollar"},
-	"CNY":  {"¥", "Chinese Yuan"},
-	"DAI":  {"DAI", "DAI stablecoin"},
-	"xDAI": {"xDAI", "xDAI stablecoin"},
-	"ETH":  {"ETH", "Ether"},
-	"EUR":  {"€", "Euro"},
-	"GBP":  {"£", "Pound Sterling"},
-	"GNO":  {"GNO", "Gnosis"},
-	"mGNO": {"mGNO", "mGnosis"},
-	"JPY":  {"¥", "Japanese Yen"},
-	"RUB":  {"₽", "Russian Ruble"},
-	"USD":  {"$", "United States Dollar"},
+	"AUD":    {"A$", "Australian Dollar"},
+	"CAD":    {"C$", "Canadian Dollar"},
+	"CNY":    {"¥", "Chinese Yuan"},
+	"DAI":    {"DAI", "DAI stablecoin"},
+	"xDAI":   {"xDAI", "xDAI stablecoin"},
+	"ETH":    {"ETH", "Ether"},
+	"EUR":    {"€", "Euro"},
+	"GBP":    {"£", "Pound Sterling"},
+	"GNO":    {"GNO", "Gnosis"},
+	"mGNO":   {"mGNO", "mGnosis"},
+	"JPY":    {"¥", "Japanese Yen"},
+	"RUB":    {"₽", "Russian Ruble"},
+	"USD":    {"$", "United States Dollar"},
+	"STRAX":  {"STRAX", "Strat"},
+	"tSTRAX": {"tSTRAX", "Test Strat"},
 }
 
 func init() {

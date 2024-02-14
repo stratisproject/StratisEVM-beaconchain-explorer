@@ -231,7 +231,10 @@ DBCHECK:
 			time.Sleep(ese.ErrorInterval)
 			continue
 		}
-		latestDay := utils.DayOfSlot(latestFinalizedEpoch*utils.Config.Chain.ClConfig.SlotsPerEpoch) - 1
+		latestDay := utils.DayOfSlot(latestFinalizedEpoch * utils.Config.Chain.ClConfig.SlotsPerEpoch)
+		if latestDay > 0 {
+			latestDay -= 1
+		}
 
 		logger.Infof("latest day is %v", latestDay)
 		// count rows of eth.store days in db

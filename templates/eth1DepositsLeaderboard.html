@@ -10,7 +10,7 @@
     var debounce = null
     var scatterOptions = {
       title: {
-        text: "Validators by STRAX Address",
+        text: "Validators by Eth Address",
       },
       chart: {
         type: "column",
@@ -51,7 +51,7 @@
       },
       xAxis: {
         title: {
-          text: "STRAX Address",
+          text: "Eth Address",
           style: {
             color: "var(--font-color)",
           },
@@ -130,55 +130,55 @@
     }
   </script>
   <script>
-    $(document).ready(function () {
-      var usp = new URLSearchParams(window.location.search)
-      var q = usp.get('q')
-      {{ if len.DepositContract}}
-        var tbl = $('#deposits').DataTable({
-          searchDelay: 0,
-          stateSave: true,
-          stateSaveCallback: function (settings, data) {
-            data.start = 0
-            localStorage.setItem("DataTables_" + settings.sInstance, JSON.stringify(data))
-          },
-          stateLoadCallback: function (settings) {
-            return JSON.parse(localStorage.getItem("DataTables_" + settings.sInstance))
-          },
-          processing: true,
-          serverSide: true,
-          ordering: true,
-          order: [[1, 'desc']],
-          searching: true,
-          ajax: dataTableLoader('/validators/deposit-leaderboard/data'),
-          pagingType: 'input',
-          preDrawCallback: function () {
-            // this does not always work.. not sure how to solve the staying tooltip
-            try {
-              $('#deposits').find('[data-toggle="tooltip"]').tooltip('dispose')
-            } catch (e) {
-              console.error(e)
+        $(document).ready(function () {
+            var usp = new URLSearchParams(window.location.search)
+            var q = usp.get('q')
+            {{if len .DepositContract}}
+                  var tbl = $('#deposits').DataTable({
+                  searchDelay: 0,
+                  stateSave: true,
+                  stateSaveCallback: function (settings, data) {
+                    data.start = 0
+                    localStorage.setItem("DataTables_" + settings.sInstance, JSON.stringify(data))
+                  },
+                  stateLoadCallback: function (settings) {
+                    return JSON.parse(localStorage.getItem("DataTables_" + settings.sInstance))
+                  },
+                  processing: true,
+                  serverSide: true,
+                  ordering: true,
+                  order: [[1, 'desc']],
+                  searching: true,
+                  ajax: dataTableLoader('/validators/deposit-leaderboard/data'),
+                  pagingType: 'input',
+                  preDrawCallback: function () {
+                        // this does not always work.. not sure how to solve the staying tooltip
+                        try {
+                              $('#deposits').find('[data-toggle="tooltip"]').tooltip('dispose')
+                        } catch (e) {
+                              console.error(e)
+                        }
+                  },
+                  drawCallback: function (settings) {
+                        formatTimestamps('#deposits')
+                        Highcharts.chart('scatterChart', scatterOptions)
+                  },
+                  language: {
+                        searchPlaceholder: 'Address',
+                        search: '',
+                        paginate: {
+                              previous: '<i class="fas fa-chevron-left"></i>',
+                              next: '<i class="fas fa-chevron-right"></i>'
+                        }
+                  }
+                  })
+            {{end}}
+            if (q) {
+                tbl.search(q);
+                tbl.draw();
             }
-          },
-          drawCallback: function (settings) {
-            formatTimestamps('#deposits')
-            Highcharts.chart('scatterChart', scatterOptions)
-          },
-          language: {
-            searchPlaceholder: 'Address',
-            search: '',
-            paginate: {
-              previous: '<i class="fas fa-chevron-left"></i>',
-              next: '<i class="fas fa-chevron-right"></i>'
-            }
-          }
         })
-      {{ end }}
-      if (q) {
-        tbl.search(q);
-        tbl.draw();
-      }
-    })
-  </script>
+    </script>
 {{ end }}
 {{ define "css" }}
   <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />

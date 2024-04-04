@@ -11,6 +11,7 @@ import (
 	"eth2-exporter/handlers"
 	"eth2-exporter/metrics"
 	"eth2-exporter/price"
+	"eth2-exporter/ratelimit"
 	"eth2-exporter/rpc"
 	"eth2-exporter/services"
 	"eth2-exporter/static"
@@ -415,6 +416,7 @@ func main() {
 			router.HandleFunc("/block/{block}", handlers.Eth1Block).Methods("GET")
 			router.HandleFunc("/block/{block}/transactions", handlers.BlockTransactionsData).Methods("GET")
 			router.HandleFunc("/tx/{hash}", handlers.Eth1TransactionTx).Methods("GET")
+			router.HandleFunc("/tx/{hash}/data", handlers.Eth1TransactionTxData).Methods("GET")
 			router.HandleFunc("/mempool", handlers.MempoolView).Methods("GET")
 			router.HandleFunc("/burn", handlers.Burn).Methods("GET")
 			router.HandleFunc("/burn/data", handlers.BurnPageData).Methods("GET")
@@ -609,6 +611,9 @@ func main() {
 		if utils.Config.Metrics.Enabled {
 			router.Use(metrics.HttpMiddleware)
 		}
+
+		ratelimit.Init()
+		router.Use(ratelimit.HttpMiddleware)
 
 		n := negroni.New(negroni.NewRecovery())
 		n.Use(gzip.Gzip(gzip.DefaultCompression))

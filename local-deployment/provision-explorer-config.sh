@@ -24,6 +24,7 @@ cat <<EOF > .env
 CL_PORT=$CL_PORT
 EL_PORT=$EL_PORT
 REDIS_PORT=$REDIS_PORT
+REDIS_SESSIONS_PORT=$REDIS_SESSIONS_PORT
 POSTGRES_PORT=$POSTGRES_PORT
 LBT_PORT=$LBT_PORT
 EOF
@@ -79,8 +80,10 @@ bigtable:
 eth1ErigonEndpoint: 'http://127.0.0.1:$EL_PORT'
 eth1GethEndpoint: 'http://127.0.0.1:$EL_PORT'
 redisCacheEndpoint: '127.0.0.1:$REDIS_PORT'
+redisSessionStoreEndpoint: '127.0.0.1:$REDIS_SESSIONS_PORT'
 tieredCacheProvider: 'redis'
 frontend:
+  siteSSL: false
   siteDomain: "localhost:8080"
   siteName: 'Open Source Ethereum (ETH) Testnet Explorer' # Name of the site, displayed in the title tag
   siteSubtitle: "Showing a local testnet."
@@ -114,6 +117,11 @@ frontend:
     termsOfServiceUrl: "tos.pdf"
     privacyPolicyUrl: "privacy.pdf"
     imprintTemplate: '{{ define "js" }}{{ end }}{{ define "css" }}{{ end }}{{ define "content" }}Imprint{{ end }}'
+  stripe:
+    sapphire: price_sapphire
+    emerald: price_emerald
+    diamond: price_diamond
+  ratelimitUpdateInterval: 1s
 
 indexer:
   # fullIndexOnStartup: false # Perform a one time full db index on startup

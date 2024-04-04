@@ -143,6 +143,7 @@ type Stats struct {
 	ActiveValidatorCount           *uint64 `db:"count"`
 	PendingValidatorCount          *uint64 `db:"count"`
 	ValidatorChurnLimit            *uint64
+	ValidatorActivationChurnLimit  *uint64
 	LatestValidatorWithdrawalIndex *uint64 `db:"index"`
 	WithdrawableValidatorCount     *uint64 `db:"count"`
 	// WithdrawableAmount             *uint64 `db:"amount"`
@@ -1325,6 +1326,13 @@ type StakeWithUsPageData struct {
 	FlashMessage string
 	RecaptchaKey string
 }
+
+type PasswordResetNotAllowedError struct{}
+
+func (e *PasswordResetNotAllowedError) Error() string {
+	return "password reset not allowed for this account"
+}
+
 type RateLimitError struct {
 	TimeLeft time.Duration
 }
@@ -1593,6 +1601,15 @@ type Eth1AddressPageData struct {
 	Tabs               []Eth1AddressPageTabs
 }
 
+type ContractInteractionType uint8
+
+const (
+	CONTRACT_NONE        ContractInteractionType = 0
+	CONTRACT_CREATION    ContractInteractionType = 1
+	CONTRACT_PRESENT     ContractInteractionType = 2
+	CONTRACT_DESTRUCTION ContractInteractionType = 3
+)
+
 type Eth1AddressPageTabs struct {
 	Id   string
 	Href string
@@ -1670,6 +1687,19 @@ type Eth1TokenPageData struct {
 	HoldersTable     *DataTableResponse
 }
 
+type ITransaction struct {
+	From      template.HTML
+	To        template.HTML
+	Amount    template.HTML
+	TracePath template.HTML
+	Advanced  bool
+	Gas       struct {
+		Limit uint64
+		// Usage    uint64
+		// UsedPerc float64
+	}
+}
+
 type Transfer struct {
 	From   template.HTML
 	To     template.HTML
@@ -1691,7 +1721,7 @@ type EpochInfo struct {
 type Eth1TxData struct {
 	From         common.Address
 	To           *common.Address
-	InternalTxns []Transfer
+	InternalTxns []ITransaction
 	FromName     string
 	ToName       string
 	Gas          struct {

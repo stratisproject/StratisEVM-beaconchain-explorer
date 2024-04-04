@@ -68,6 +68,7 @@ require (
 	golang.org/x/crypto v0.18.0
 	golang.org/x/sync v0.5.0
 	golang.org/x/text v0.14.0
+	golang.org/x/time v0.3.0
 	google.golang.org/api v0.118.0
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -200,7 +201,6 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20230403163135-c38d8f061ccd // indirect
 	google.golang.org/grpc v1.54.0 // indirect
 	lukechampine.com/blake3 v1.2.1 // indirect

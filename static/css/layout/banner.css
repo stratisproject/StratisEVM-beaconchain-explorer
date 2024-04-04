@@ -4,7 +4,7 @@
   z-index: 999;
   width: 100%;
   min-width: 320px;
-  background-color: var(--banner-background);
+  background-color: var(--bg);
   color: var(--banner-text);
   /* font-size: 90%; */
 }

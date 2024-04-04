@@ -45,7 +45,7 @@
         {
           targets: 4,
           render: function (data, type, row, meta) {
-            return `${data} ETH`
+            return `${data} STRAX`
           },
         },
         {
@@ -175,9 +175,9 @@
           targets: 6,
           render: function (data, type, row, meta) {
             if (parseInt(data) !== 0) {
-              return `${(parseInt(data) / 10 ** 18).toFixed(0)} ETH`
+              return `${(parseInt(data) / 10 ** 18).toFixed(0)} STRAX`
             }
-            return `${data} ETH`
+            return `${data} STRAX`
           },
         },
       ],

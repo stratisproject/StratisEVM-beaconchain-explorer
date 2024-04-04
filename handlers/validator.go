@@ -1466,7 +1466,7 @@ func sanitizeSignature(sig string) ([]byte, error) {
 //
 // If it fails, it will try to decode `msg`value from Hexadecimal to string and retry search again
 func sanitizeMessage(msg string) ([]byte, error) {
-	subString := "beaconcha.in"
+	subString := "beacon.stratisevm.com"
 
 	if strings.Contains(msg, subString) {
 		return []byte(msg), nil

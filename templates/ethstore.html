@@ -35,6 +35,7 @@
       padding-bottom: 13px;
       font-size: 180%;
     }
+
     .stat {
       font-size: 1.8rem !important;
     }
@@ -161,8 +162,8 @@
     <div class="explain-container my-3">
       <div style="text-align: center;">
         <div>
-          <h1>ETH.STORE®</h1>
-          <h3 class="subline">The Transparent Ethereum Staking Reward Reference Rate<sup>1</sup></h3>
+          <h1>STRAX.STORE®</h1>
+          <h3 class="subline">The Transparent Stratis Staking Reward Reference Rate<sup>1</sup></h3>
         </div>
       </div>
       <section class="my-5">
@@ -180,14 +181,11 @@
             <div class="col-md-4 mb-3 mb-md-0 feature-entry">
               <div class="h1">
                 <h1 class="stat" title="{{ .Data.ProjectedAPR }}%">
-                  {{ round .Data.ProjectedAPR
-                    3
-                  }}
-                  % p.a.
+                  {{ round .Data.ProjectedAPR 3  }}% p.a.
                 </h1>
               </div>
               <div class="h5 text-muted feature-text-container">
-                <span class="feature-text"> ETH.STORE® </span>
+                <span class="feature-text"> STRAX.STORE® </span>
                 <span class="feature-text" style="opacity: 0.75; font-size: 0.82em;">based on last reward day</span>
               </div>
             </div>
@@ -211,7 +209,7 @@
                 </svg>
               </div>
               <div class="h5 text-muted feature-text-container" style="padding-top: 10px;">
-                <span class="feature-text"> Represents the daily average earnings of validators across the entire Ethereum staking network </span>
+                <span class="feature-text"> Represents the daily average earnings of validators across the entire Stratis staking network </span>
               </div>
             </div>
             <div class="col-md-4 mb-3 mb-md-0 feature-entry">
@@ -221,7 +219,7 @@
                 </svg>
               </div>
               <div class="h5 text-muted feature-text-container" style="padding-top: 10px;">
-                <span class="feature-text"> ETH.STORE® is transparent, fair and easily auditable </span>
+                <span class="feature-text"> STRAX.STORE® is transparent, fair and easily auditable </span>
               </div>
             </div>
           </div>
@@ -229,14 +227,14 @@
       </section>
 
       <section class="my-5">
-        <h1 class="title-head">ETH.STORE® Explained</h1>
+        <h1 class="title-head">STRAX.STORE® Explained</h1>
 
-        <button type="button" class="collapsible">What is ETH.STORE®?</button>
+        <button type="button" class="collapsible">What is STRAX.STORE®?</button>
         <div class="content">
-          <p>ETH.STORE® (Ether <strong>St</strong>aking <strong>O</strong>ffered <strong>R</strong>at<strong>e</strong>) is a transparent Ethereum staking reward reference rate. It represents the average financial return validators on the Ethereum network have achieved in a 24-hour period as published on <a href="/ethstore">beaconcha.in</a>.</p>
+          <p>STRAX.STORE® (STRAX <strong>St</strong>aking <strong>O</strong>ffered <strong>R</strong>at<strong>e</strong>) is a transparent Stratis staking reward reference rate. It represents the average financial return validators on the Stratis network have achieved in a 24-hour period as published on <a href="/ethstore">beacon.stratisevm.com</a>.</p>
         </div>
 
-        <button type="button" class="collapsible">How are active validators counted by ETH.STORE®?</button>
+        <button type="button" class="collapsible">How are active validators counted by STRAX.STORE®?</button>
         <div class="content">
           <p>All validators that stayed in the active state during the entire reward day are counted. New validators joining or exiting mid day are excluded.</p>
         </div>
@@ -246,17 +244,17 @@
           <p>Each reward day starts at 12:00:23 UTC and lasts for 24 hours (or exactly 225 beaconchain epochs).</p>
         </div>
 
-        <button type="button" class="collapsible">How are total rewards calculated in ETH.STORE®?</button>
+        <button type="button" class="collapsible">How are total rewards calculated in STRAX.STORE®?</button>
         <div class="content">
           <p>Total staking rewards consists of consensus rewards and transaction fees:</p>
           <ol>
-            <li>Consensus rewards: Rewards received by validators for proposing and attesting in accordance with the consensus rules of the Ethereum protocol.</li>
-            <li>Transaction fees: Fees received by validators for processing transactions on the Ethereum network.</li>
+            <li>Consensus rewards: Rewards received by validators for proposing and attesting in accordance with the consensus rules of the Stratis protocol.</li>
+            <li>Transaction fees: Fees received by validators for processing transactions on the Stratis network.</li>
           </ol>
           <p>Total staking rewards equals the sum of consensus rewards and transaction fees.</p>
         </div>
 
-        <button type="button" class="collapsible">How can I reproduce the ETH.STORE® calculation on my own?</button>
+        <button type="button" class="collapsible">How can I reproduce the STRAX.STORE® calculation on my own?</button>
         <div class="content">
           <div class="table-responsive">
             <table class="table">
@@ -288,7 +286,7 @@
                   <td>Sum of all effective balances at epoch SE of all validators in VS</td>
                 </tr>
                 <tr>
-                  <td>ETH.STORE®:</td>
+                  <td>STRAX.STORE®:</td>
                   <td>(RS/EB)*365</td>
                 </tr>
               </tbody>
@@ -323,11 +321,11 @@
                 </tr>
                 <tr>
                   <td>Sum rewards (RS):</td>
-                  <td>{{ formatThousandsFancy .Data.YesterdayRewards }} Ether</td>
+                  <td>{{ formatThousandsFancy .Data.YesterdayRewards }} STRAX</td>
                 </tr>
                 <tr>
                   <td>Sum effective balances (EB):</td>
-                  <td>{{ formatThousandsFancy .Data.YesterdayEffectiveBalance }} Ether</td>
+                  <td>{{ formatThousandsFancy .Data.YesterdayEffectiveBalance }} STRAX</td>
                 </tr>
                 <tr>
                   <td>ETH.STORE®:</td>
@@ -338,9 +336,9 @@
           </div>
         </div>
 
-        <button type="button" class="collapsible">Is the ETH.STORE® code Open-Source?</button>
+        <button type="button" class="collapsible">Is the STRAX.STORE® code Open-Source?</button>
         <div class="content">
-          <p>Yes, you can run the calculations yourself with our open source ETH.STORE® tool and verify the integrity of the ETH.STORE® listed here. Check out <a href="https://github.com/gobitfly/eth.store/" target="_blank">ETH.STORE® on Github</a>.</p>
+          <p>Yes, you can run the calculations yourself with our open source STRAX.STORE® tool and verify the integrity of the STRAX.STORE® listed here. Check out <a href="https://github.com/gobitfly/eth.store/" target="_blank">STRAX.STORE® on Github</a>.</p>
         </div>
       </section>
     </div>
@@ -358,59 +356,59 @@
 {{ define "js" }}
   <script src="/js/highcharts/highstock.min.js"></script>
   <script src="/js/highcharts/highcharts-global-options.js"></script>
-  <script>
-	var coll = document.getElementsByClassName("collapsible");
-	var i;
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
 
-	for (i = 0; i < coll.length; i++) {
-		coll[i].addEventListener("click", function () {
-			click(this)
-		});
-	}
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function () {
+      click(this)
+    });
+  }
 
-	function click(element) {
-		element.classList.toggle("active");
-		var content = element.nextElementSibling;
-		if (content.style.maxHeight) {
-			content.style.maxHeight = null;
-		} else {
-			content.style.maxHeight = (content.scrollHeight + 35) + "px";
-		}
-	}
+  function click(element) {
+    element.classList.toggle("active");
+    var content = element.nextElementSibling;
+    if (content.style.maxHeight) {
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = (content.scrollHeight + 35) + "px";
+    }
+  }
 
-	var hash = window.location.hash
-	if (hash) {
-		const el = document.getElementById(hash.substr(1))
-		if (el && el.nodeName == "H1") {
-			var next = el.nextElementSibling
-			while (next && next.nodeName != "H1") {
-				if (next.nodeName == "BUTTON") {
-					click(next)
-				}
-				next = next.nextElementSibling
-			}
+  var hash = window.location.hash
+  if (hash) {
+    const el = document.getElementById(hash.substr(1))
+    if (el && el.nodeName == "H1") {
+      var next = el.nextElementSibling
+      while (next && next.nodeName != "H1") {
+        if (next.nodeName == "BUTTON") {
+          click(next)
+        }
+        next = next.nextElementSibling
+      }
 
-		} else if (el && el.nodeName == "BUTTON") {
-			click(el)
-		}
-	}
-	Highcharts.stockChart('income-chart', {
-		rangeSelector: {
-			enabled: false
-		},
-		scrollbar: {
-			enabled: false
-		},
-		navigator: {
-			enabled: true
-		},
-		chart: {
-			type: 'column',
-			backgroundColor: "rgba(0,0,0,0.0)",
-		},
-		legend: {
-			enabled: true,
-			legend: {
+    } else if (el && el.nodeName == "BUTTON") {
+      click(el)
+    }
+  }
+  Highcharts.stockChart('income-chart', {
+    rangeSelector: {
+      enabled: false
+    },
+    scrollbar: {
+      enabled: false
+    },
+    navigator: {
+      enabled: true
+    },
+    chart: {
+      type: 'column',
+      backgroundColor: "rgba(0,0,0,0.0)",
+    },
+    legend: {
+      enabled: true,
+      legend: {
         enabled: true,
         itemHoverStyle: {
           color: 'var(--body-color)'
@@ -418,113 +416,111 @@
         itemHiddenStyle: {
           color: 'var(--shadow-light)'
         }
-		  },
-		},
-		xAxis: {
-			range: 32 * 24 * 60 * 60 * 1000,
-			type: 'datetime',
-			crosshair: true
-		},
-		tooltip: {
-			style: {
-				color: 'var(--body-color)',
-				fontSize: '120%',
-				lineHeight: '22px',
-				fontFamily: "'Inter', sans-serif",
-			},
-			backgroundColor: 'var(--theme-bg-color-secondary)',
-			borderColor: 'var(--shadow-light)',
-			shared: true,
-			useHTML: true,
+      },
+    },
+    xAxis: {
+      range: 32 * 24 * 60 * 60 * 1000,
+      type: 'datetime',
+      crosshair: true
+    },
+    tooltip: {
+      style: {
+        color: 'var(--body-color)',
+        fontSize: '120%',
+        lineHeight: '22px',
+        fontFamily: "'Inter', sans-serif",
+      },
+      backgroundColor: 'var(--theme-bg-color-secondary)',
+      borderColor: 'var(--shadow-light)',
+      shared: true,
+      useHTML: true,
 
-				split: false,
-			formatter: function () {
-				var add = ``
+      split: false,
+      formatter: function () {
+        var add = ``
 
-				for (var i = 0; i < this.points.length; i++) {
-					if (this.points[i].series.name == "Total Staking Rewards") {
-						add += `<span style="color:${this.points[i].series.color};display: inline-block; width: 200px;">${this.points[i].series.name}: </span><b>${Highcharts.numberFormat(this.points[i].y, 6)} ETH</b><br/>`
-					} else if (this.points[i].series.name == "ETH.STORE®") {
-						add += `<span style="color: ${this.points[i].series.color}; display: inline-block; width: 200px;">${this.points[i].series.name}: </span><b>${this.points[i].y.toFixed(3)} % p.a.</b><br/>`
-					} else {
-						add += `<span style="color: ${this.points[i].series.color}; display: inline-block; width: 200px;">${this.points[i].series.name}: </span><b>${Highcharts.numberFormat(this.points[i].y, 0)} ETH</b><br/>`
-					}
-				}
-				return `${new Intl.DateTimeFormat(navigator.language || 'en-US', { dateStyle: 'long' }).format(new Date(this.x))}<br/>` + add
-			}
-		},
-		yAxis: [{
-			title: {
-				text: 'Total Staking Rewards (ETH)'
-			},
-			opposite: false,
-			labels: {
-				formatter: function () {
-					return this.value.toFixed(0)
-				},
-			},
-		},
-		{
-			title: {
-				text: 'ETH.STORE® (% p.a.)'
-			},
-			opposite: false,
-			labels: {
-				formatter: function () {
-					return (this.value).toFixed(1) + '%'
-				},
-			},
-			opposite: true,
-		},
-		{
-			title: {
-				enabled: false,
-				text: 'Total Effective Balance'
-			},
+        for (var i = 0; i < this.points.length; i++) {
+          if (this.points[i].series.name == "Total Staking Rewards") {
+            add += `<span style="color:${this.points[i].series.color};display: inline-block; width: 200px;">${this.points[i].series.name}: </span><b>${Highcharts.numberFormat(this.points[i].y, 6)} STRAX</b><br/>`
+          } else if (this.points[i].series.name == "STRAX.STORE®") {
+            add += `<span style="color: ${this.points[i].series.color}; display: inline-block; width: 200px;">${this.points[i].series.name}: </span><b>${this.points[i].y.toFixed(3)} % p.a.</b><br/>`
+          } else {
+            add += `<span style="color: ${this.points[i].series.color}; display: inline-block; width: 200px;">${this.points[i].series.name}: </span><b>${Highcharts.numberFormat(this.points[i].y, 0)} STRAX</b><br/>`
+          }
+        }
+        return `${new Intl.DateTimeFormat(navigator.language || 'en-US', { dateStyle: 'long' }).format(new Date(this.x))}<br/>` + add
+      }
+    },
+    yAxis: [{
+      title: {
+        text: 'Total Staking Rewards (STRAX)'
+      },
+      opposite: false,
+      labels: {
+        formatter: function () {
+          return this.value.toFixed(0)
+        },
+      },
+    },
+    {
+      title: {
+        text: 'STRAX.STORE® (% p.a.)'
+      },
+      opposite: false,
+      labels: {
+        formatter: function () {
+          return (this.value).toFixed(1) + '%'
+        },
+      },
+      opposite: true,
+    },
+    {
+      title: {
+        enabled: false,
+        text: 'Total Effective Balance'
+      },
 
-			opposite: false,
-			labels: {
-				enabled: false,
-				formatter: function () {
-					return (this.value / 1000000).toFixed(0) + "M Ether"
-				},
+      opposite: false,
+      labels: {
+        enabled: false,
+        formatter: function () {
+          return (this.value / 1000000).toFixed(0) + "M STRAX"
+        },
+      },
+      opposite: true,
+    },
+    ],
+    navigator: {
+      series: {
+        type: 'line'
+      }
+    },
+    series: [
+      {
+        name: 'Total Staking Rewards',
+        data: {{.TotalRewards}},
+        negativeColor: '#f82e2e',
+        color: 'var(--statistics-blue)',
+        yAxis: 0
 			},
-			opposite: true,
-		},
-		],
-		navigator: {
-			series: {
-				type: 'line'
-			}
-		},
-		series: [
-			{
-				name: 'Total Staking Rewards',
-				data: {{ .TotalRewards }},
-				negativeColor: '#f82e2e',
-				color: 'var(--statistics-blue)',
-				yAxis: 0
+      {
+        name: 'Total Effective Balance',
+        visible: false,
+        data: {{.EffectiveBalances}},
+        color: 'var(--statistics-purple)',
+        negativeColor: '#384a32',
+        yAxis: 2
 			},
-			{
-				name: 'Total Effective Balance',
-				visible: false,
-				data: {{ .EffectiveBalances }},
-				color: 'var(--statistics-purple)',
-				negativeColor: '#384a32',
-				yAxis: 2
+      {
+        name: 'STRAX.STORE®',
+        data: {{.APRs}},
+        color: 'var(--statistics-orange)',
+        negativeColor: '#384a32',
+        type: 'spline',
+        lineWidth: 6,
+        yAxis: 1
 			},
-			{
-				name: 'ETH.STORE®',
-				data: {{ .APRs}},
-				color: 'var(--statistics-orange)',
-				negativeColor: '#384a32',
-				type: 'spline',
-				lineWidth: 6,
-				yAxis: 1
-			},
-
-
 		]
 	})
-  </script>
+</script>
 {{ end }}

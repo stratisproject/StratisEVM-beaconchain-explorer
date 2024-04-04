@@ -713,12 +713,12 @@ func sendConfirmationEmail(email string) error {
 	subject := fmt.Sprintf("%s: Verify your email-address", utils.Config.Frontend.SiteDomain)
 	msg := fmt.Sprintf(`Please verify your email on %[1]s by clicking this link:
 
-https://%[1]s/confirm/%[2]s
+%[2]s://%[1]s/confirm/%[3]s
 
 Best regards,
 
 %[1]s
-`, utils.Config.Frontend.SiteDomain, emailConfirmationHash)
+`, utils.Config.Frontend.SiteDomain, utils.Config.SiteProtocol(), emailConfirmationHash)
 	err = mail.SendTextMail(email, subject, msg, []types.EmailAttachment{})
 	if err != nil {
 		return err
@@ -773,14 +773,14 @@ func sendPasswordResetEmail(email string) error {
 	subject := fmt.Sprintf("%s: Reset your password", utils.Config.Frontend.SiteDomain)
 	msg := fmt.Sprintf(`To update your password on %[1]s, please click this link:
 
-https://%[1]s/reset/%[2]s
+%[2]s://%[1]s/reset/%[3]s
 	
 This link will expire in 30 minutes.
 	
 Best regards,
 
 %[1]s
-`, utils.Config.Frontend.SiteDomain, resetHash)
+`, utils.Config.Frontend.SiteDomain, utils.Config.SiteProtocol(), resetHash)
 	err = mail.SendTextMail(email, subject, msg, []types.EmailAttachment{})
 	if err != nil {
 		return err

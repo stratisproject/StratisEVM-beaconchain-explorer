@@ -12,8 +12,8 @@
       <div class="container">
         <div style="padding-top: 2rem;" class="row justify-content-between align-items-center">
           <div class="col-md-6 mb-5">
-            <h1 class="h6 font-weight-bold text-primary">Connect to Ethereum</h1>
-            <h2 class="mb-4">The most popular Ethereum clients</h2>
+            <h1 class="h6 font-weight-bold text-primary">Connect to Stratis</h1>
+            <h2 class="mb-4">The most popular Stratis clients</h2>
           </div>
           <div class="col-md-5 p-1">
             <svg id="b849a2f0-74e0-42be-b224-12e88fa50e48" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 983.54823 576.15723">
@@ -52,7 +52,7 @@
             <a href="/register" class="btn btn-primary btn-sm d-flex mr-2">
               <span class="text-white"><b>Sign Up</b></span>
             </a>
-            <span>to receive notifications about your favorite ETH clients </span>
+            <span>to receive notifications about your favorite Stratis clients </span>
           </div>
         {{ end }}
       </div>
@@ -82,51 +82,20 @@
                     <td data-column="Name"><a href="https://geth.ethereum.org/">Geth</a></td>
                     <td data-column="Language">Go</td>
                     <td data-column="Network share"><a href="https://ethernodes.org">{{ if .Geth.NetworkShare }}{{ .Geth.NetworkShare }}{{ else }}N/a{{ end }}</a></td>
-                    <td data-column="Latest update"><a href="https://github.com/ethereum/go-ethereum/releases">{{ .Geth.ClientReleaseVersion }}</a> - {{ .Geth.ClientReleaseDate }}</td>
+                    <td data-column="Latest update"><a href="https://github.com/stratisproject/go-stratis/releases">{{ .Geth.ClientReleaseVersion }}</a> - {{ .Geth.ClientReleaseDate }}</td>
                     <td data-column="Social media">
-                      <a href="https://discord.gg/VNnEHqsHMr" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://twitter.com/go_ethereum" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
+                      <!-- <a href="https://discord.gg/VNnEHqsHMr" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
+                      <a href="https://twitter.com/go_ethereum" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a> -->
                     </td>
                     {{ if $.User.Authenticated }}
-                      <td><input id="geth-checkbox" type="checkbox" data-toggle="toggle" {{ if .Geth.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('geth-checkbox', 'eth_client_update', 'geth')" /></td>
-                    {{ end }}
-                  </tr>
-                  <tr>
-                    <td data-column="Name"><a href="https://nethermind.io/">Nethermind</a></td>
-                    <td data-column="Language">.NET</td>
-                    <td data-column="Network share"><a href="https://ethernodes.org">{{ if .Nethermind.NetworkShare }}{{ .Nethermind.NetworkShare }}{{ else }}N/a{{ end }}</a></td>
-                    <td data-column="Latest update"><a href="https://github.com/NethermindEth/nethermind/releases">{{ .Nethermind.ClientReleaseVersion }}</a> - {{ .Nethermind.ClientReleaseDate }}</td>
-                    <td data-column="Social media">
-                      <a href="https://discord.gg/RpaxqHRaYT" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://twitter.com/nethermindeth" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
-                    </td>
-                    {{ if $.User.Authenticated }}
-                      <td><input id="nethermind-checkbox" type="checkbox" data-toggle="toggle" {{ if .Nethermind.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('nethermind-checkbox', 'eth_client_update', 'nethermind')" /></td>
-                    {{ end }}
-                  </tr>
-                  <tr>
-                    <td data-column="Name"><a href="https://besu.hyperledger.org/en/stable/">Besu </a></td>
-                    <td data-column="Language">Java</td>
-                    <td data-column="Network share"><a href="https://ethernodes.org">{{ if .Besu.NetworkShare }}{{ .Besu.NetworkShare }}{{ else }}N/a{{ end }}</a></td>
-                    <td data-column="Latest update"><a href="https://github.com/hyperledger/besu/releases">{{ .Besu.ClientReleaseVersion }}</a> - {{ .Besu.ClientReleaseDate }}</td>
-                    <td data-column="Social media">
-                      <a href="https://discord.gg/invite/hyperledger" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://mobile.twitter.com/hyperledgerbesu" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
-                    </td>
-                    {{ if $.User.Authenticated }}
-                      <td><input id="besu-checkbox" type="checkbox" data-toggle="toggle" {{ if .Besu.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('besu-checkbox', 'eth_client_update', 'besu')" /></td>
-                    {{ end }}
-                  </tr>
-                  <tr>
-                    <td data-column="Name"><a href="https://github.com/ledgerwatch/erigon">Erigon </a></td>
-                    <td data-column="Language">Go</td>
-                    <td data-column="Network share"><a href="https://ethernodes.org">{{ if .Erigon.NetworkShare }}{{ .Erigon.NetworkShare }}{{ else }}N/a{{ end }}</a></td>
-                    <td data-column="Latest update"><a href="https://github.com/ledgerwatch/erigon/releases">{{ .Erigon.ClientReleaseVersion }}</a> - {{ .Erigon.ClientReleaseDate }}</td>
-                    <td data-column="Social media">
-                      <a href="https://twitter.com/erigoneth" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
-                    </td>
-                    {{ if $.User.Authenticated }}
-                      <td><input id="erigon-checkbox" type="checkbox" data-toggle="toggle" {{ if .Erigon.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('erigon-checkbox', 'eth_client_update', 'erigon')" /></td>
+                      <td>
+                        <input
+                          id="geth-checkbox"
+                          type="checkbox"
+                          data-toggle="toggle"
+                          {{ if .Geth.IsUserSubscribed }}checked{{ end }}
+                          onchange="updateUserSubscription('geth-checkbox', 'eth_client_update', 'geth')" />
+                      </td>
                     {{ end }}
                   </tr>
                 </tbody>
@@ -156,64 +125,22 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td data-column="Name"><a href="https://docs.teku.consensys.net/">Teku</a></td>
-                    <td data-column="Language">Java</td>
-                    <td data-column="Latest update"><a href="https://github.com/ConsenSys/teku/releases">{{ .Teku.ClientReleaseVersion }}</a> - {{ .Teku.ClientReleaseDate }}</td>
-                    <td data-column="Social media">
-                      <a href="https://discord.gg/7hPv2T6" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://twitter.com/Teku_ConsenSys" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
-                    </td>
-                    {{ if $.User.Authenticated }}
-                      <td><input id="teku-checkbox" type="checkbox" data-toggle="toggle" {{ if .Teku.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('teku-checkbox', 'eth_client_update', 'teku')" /></td>
-                    {{ end }}
-                  </tr>
-                  <tr>
                     <td data-column="Name"><a href="https://prysmaticlabs.com/">Prysm</a></td>
                     <td data-column="Language">GO</td>
-                    <td data-column="Latest update"><a href="https://github.com/prysmaticlabs/prysm/releases">{{ .Prysm.ClientReleaseVersion }}</a> - {{ .Prysm.ClientReleaseDate }}</td>
+                    <td data-column="Latest update"><a href="https://github.com/stratisproject/prysm-stratis/releases">{{ .Prysm.ClientReleaseVersion }}</a> - {{ .Prysm.ClientReleaseDate }}</td>
                     <td data-column="Social media">
-                      <a href="https://discord.gg/XkyZSSk4My" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://twitter.com/prylabs" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
+                      <!-- <a href="https://discord.gg/XkyZSSk4My" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
+                      <a href="https://twitter.com/prylabs" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a> -->
                     </td>
                     {{ if $.User.Authenticated }}
-                      <td><input id="prysm-checkbox" type="checkbox" data-toggle="toggle" {{ if .Prysm.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('prysm-checkbox', 'eth_client_update', 'prysm')" /></td>
-                    {{ end }}
-                  </tr>
-                  <tr>
-                    <td data-column="Name"><a href="https://nimbus.team/">Nimbus</a></td>
-                    <td data-column="Language">Nim</td>
-                    <td data-column="Latest update"><a id="nimbus" href="https://github.com/status-im/nimbus-eth2/releases">{{ .Nimbus.ClientReleaseVersion }}</a> - {{ .Nimbus.ClientReleaseDate }}</td>
-                    <td data-column="Social media">
-                      <a href="https://discord.gg/XRxWahP" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://twitter.com/ethnimbus" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
-                    </td>
-                    {{ if $.User.Authenticated }}
-                      <td><input id="nimbus-checkbox" type="checkbox" data-toggle="toggle" {{ if .Nimbus.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('nimbus-checkbox', 'eth_client_update', 'nimbus')" /></td>
-                    {{ end }}
-                  </tr>
-                  <tr>
-                    <td data-column="Name"><a href="https://lighthouse.sigmaprime.io/">Lighthouse</a></td>
-                    <td data-column="Language">Rust</td>
-                    <td data-column="Latest update"><a id="lighthouse" href="https://github.com/sigp/lighthouse/releases">{{ .Lighthouse.ClientReleaseVersion }}</a> - {{ .Lighthouse.ClientReleaseDate }}</td>
-                    <td data-column="Social media">
-                      <a href="https://discord.gg/cyAszAh" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://twitter.com/sigp_io" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
-                    </td>
-                    {{ if $.User.Authenticated }}
-                      <td><input id="lighthouse-checkbox" type="checkbox" data-toggle="toggle" {{ if .Lighthouse.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('lighthouse-checkbox', 'eth_client_update', 'lighthouse')" /></td>
-                    {{ end }}
-                  </tr>
-
-                  <tr>
-                    <td data-column="Name"><a href="https://lodestar.chainsafe.io/">Lodestar</a></td>
-                    <td data-column="Language">Typescript</td>
-                    <td data-column="Latest update"><a id="lodestar" href="https://github.com/chainsafe/lodestar/releases">{{ .Lodestar.ClientReleaseVersion }}</a> - {{ .Lodestar.ClientReleaseDate }}</td>
-                    <td data-column="Social media">
-                      <a href="https://discord.gg/aMxzVcr" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
-                      <a href="https://twitter.com/lodestar_eth" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
-                    </td>
-                    {{ if $.User.Authenticated }}
-                      <td><input id="lodestar-checkbox" type="checkbox" data-toggle="toggle" {{ if .Lodestar.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('lodestar-checkbox', 'eth_client_update', 'lodestar')" /></td>
+                      <td>
+                        <input
+                          id="prysm-checkbox"
+                          type="checkbox"
+                          data-toggle="toggle"
+                          {{ if .Prysm.IsUserSubscribed }}checked{{ end }}
+                          onchange="updateUserSubscription('prysm-checkbox', 'eth_client_update', 'prysm')" />
+                      </td>
                     {{ end }}
                   </tr>
                 </tbody>
@@ -251,7 +178,18 @@
                       <a href="https://twitter.com/Rocket_Pool" target="_blank"><i class="fab fa-twitter ml-1 mr-1"></i></a>
                     </td>
                     {{ if $.User.Authenticated }}
-                      <td><input id="rocketpool-checkbox" type="checkbox" data-toggle="toggle" {{ if .RocketpoolSmartnode.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('rocketpool-checkbox', 'eth_client_update', 'rocketpool')" /></td>
+                      <td>
+                        <input
+                          id="rocketpool-checkbox"
+                          type="checkbox"
+                          data-toggle="toggle"
+                          {{ if
+                            .RocketpoolSmartnode.IsUserSubscribed
+                          }}
+                            checked
+                          {{ end }}
+                          onchange="updateUserSubscription('rocketpool-checkbox', 'eth_client_update', 'rocketpool')" />
+                      </td>
                     {{ end }}
                   </tr>
                   <tr>
@@ -262,7 +200,14 @@
                       <a href="http://discord.gg/flashbots" target="_blank"> <i class="fab fa-discord ml-1 mr-1"></i></a>
                     </td>
                     {{ if $.User.Authenticated }}
-                      <td><input id="mevboost-checkbox" type="checkbox" data-toggle="toggle" {{ if .MevBoost.IsUserSubscribed }}checked{{ end }} onchange="updateUserSubscription('mevboost-checkbox', 'eth_client_update', 'mev-boost')" /></td>
+                      <td>
+                        <input
+                          id="mevboost-checkbox"
+                          type="checkbox"
+                          data-toggle="toggle"
+                          {{ if .MevBoost.IsUserSubscribed }}checked{{ end }}
+                          onchange="updateUserSubscription('mevboost-checkbox', 'eth_client_update', 'mev-boost')" />
+                      </td>
                     {{ end }}
                   </tr>
                 </tbody>
@@ -271,31 +216,16 @@
           </div>
         </div>
       </section>
-
-      <section class="my-5">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="row justify-content-center">
-              <div class="col-md-12 col-lg-10 text-center">
-                <h1 class="h4 ">Request to add your Ethereum Client Service</h1>
-                <p class="text-muted col-md-8 px-0 mx-auto">
-                  If you have an Ethereum Client Service and want it to be listed above please create a <a class="" href="https://github.com/gobitfly/eth2-beaconchain-explorer/blob/master/templates/ethClientsServices.html">pull request <i class="fab fa-github"></i></a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   {{ end }}
   <script src="/js/jquery.min.js"></script>
-    <script>
-        {{if .User.Authenticated}}
-            if (window.location.pathname!="/user/ethClients"){
-                window.location.replace("/user/ethClients");
-            }
-        {{end}}
-    </script>
+  <script>
+    {{ if .User.Authenticated}}
+      if (window.location.pathname != "/user/ethClients") {
+        window.location.replace("/user/ethClients");
+      }
+    {{ end }}
+  </script>
   <script>
     function updateUserSubscription(checkboxID, event_name, event_filter) {
       let csrfToken = document.getElementsByName("CsrfField")[0].value

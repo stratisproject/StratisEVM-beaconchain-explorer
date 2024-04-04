@@ -11,12 +11,12 @@
 <script> const MIN_TIMESTAMP = {{.MinDateTimestamp }}</script>
   <script src="/js/validatorRewards.js"></script>
 <script>
-    $(document).ready(function () {
-        updateCurrencies({{.Currencies }}, "currency")
-        {{if .ShowSubscriptions}}
-        fetchSubscriptions()
-        {{end}}
-    })
+  $(document).ready(function () {
+    updateCurrencies({{.Currencies}}, "currency")
+  {{ if .ShowSubscriptions}}
+    fetchSubscriptions()
+  {{ end }}
+  })
 </script>
 {{ end }}
 
@@ -67,7 +67,7 @@
                 <th>Date</th>
                 <th>Balance</th>
                 <th>Income</th>
-                <th>ETH Value</th>
+                <th>STRAX Value</th>
                 <th>Income</th>
                 <!-- <th>Currency</th> -->
               </tr>
@@ -104,7 +104,17 @@
 
               <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex justify-content-end align-items-center">
-                  <button class="btn btn-secondary text-white" id="report-sub-btn" type="button" {{ if not .User.Authenticated }}disabled="true"{{ end }}><i class="fas fa-envelope p-1"></i>Subscribe</button>
+                  <button
+                    class="btn btn-secondary text-white"
+                    id="report-sub-btn"
+                    type="button"
+                    {{ if not
+                      .User.Authenticated
+                    }}
+                      disabled="true"
+                    {{ end }}>
+                    <i class="fas fa-envelope p-1"></i>Subscribe
+                  </button>
                   <span class="ml-1 d-none d-md-flex" style="color: gray; font-size: 12px;">to receive a monthly report for listed validators</span>
                   {{ if not .User.Authenticated }}<i class="fas fa-info-circle ml-1" style="color: gray; font-size: 12px;" data-toggle="tooltip" data-placement="top" title="Sign in to use this feature"></i>{{ end }}
                 </div>

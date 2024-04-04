@@ -16,23 +16,23 @@
     var clientRefs = [
         {
             id: 'prysm-graffiti',
-            config: "./{exporter-arch} --server.address='https://beaconcha.in/api/v1/client/metrics?apikey={apiKey}{machineName}' --beaconnode.type=prysm --beaconnode.address=http://localhost:8080/metrics --validator.type=prysm --validator.address=http://localhost:8081/metrics "
+            config: "./{exporter-arch} --server.address='https://beacon.stratisevm.com/api/v1/client/metrics?apikey={apiKey}{machineName}' --beaconnode.type=prysm --beaconnode.address=http://localhost:8080/metrics --validator.type=prysm --validator.address=http://localhost:8081/metrics "
         },
         {
             id: 'lighthouse-graffiti',
-            config: "--monitoring-endpoint 'https://beaconcha.in/api/v1/client/metrics?apikey={apiKey}{machineName}'"
+            config: "--monitoring-endpoint 'https://beacon.stratisevm.com/api/v1/client/metrics?apikey={apiKey}{machineName}'"
         },
         {
             id: 'nimbus-graffiti',
-            config: "./{exporter-arch} --server.address='https://beaconcha.in/api/v1/client/metrics?apikey={apiKey}{machineName}' --beaconnode.type=nimbus --beaconnode.address=http://localhost:8008/metrics"
+            config: "./{exporter-arch} --server.address='https://beacon.stratisevm.com/api/v1/client/metrics?apikey={apiKey}{machineName}' --beaconnode.type=nimbus --beaconnode.address=http://localhost:8008/metrics"
         },
         {
             id: 'teku-graffiti',
-            config: "--metrics-publish-endpoint 'https://beaconcha.in/api/v1/client/metrics?apikey={apiKey}{machineName}'"
+            config: "--metrics-publish-endpoint 'https://beacon.stratisevm.com/api/v1/client/metrics?apikey={apiKey}{machineName}'"
         },
         {
             id: 'lodestar-graffiti',
-            config: "--monitoring.endpoint 'https://beaconcha.in/api/v1/client/metrics?apikey={apiKey}{machineName}'"
+            config: "--monitoring.endpoint 'https://beacon.stratisevm.com/api/v1/client/metrics?apikey={apiKey}{machineName}'"
         }
     ]
 
@@ -329,9 +329,6 @@
                 <a class="nav-link show active" id="account-tab" data-toggle="tab" href="#account" role="tab" aria-controls="account" aria-selected="true"><i class="tab-icon mr-md-1 fas fa-user"></i><span class="tab-text" style="margin-left: 6px;">Account</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="app-tab" data-toggle="tab" href="#app" role="tab" aria-controls="app" aria-selected="false"><i class="tab-icon mr-md-1 fas fa-mobile-alt"></i><span class="tab-text" style="margin-left: 6px;">Mobile App</span></a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" id="api-tab" data-toggle="tab" href="#api" role="tab" aria-controls="api" aria-selected="false"><i class="tab-icon mr-md-1 fas fas fa-drafting-compass"></i><span class="tab-text" style="margin-left: 6px;">API</span></a>
               </li>
             </ul>
@@ -342,7 +339,7 @@
                 <div class="card my-3">
                   <div class="card-header justify-content-between d-flex align-items-center">
                     <h3 class="h5">
-                      <span>beaconcha.in Premium</span> <span class="mx-1">|</span>
+                      <span>beacon.stratisevm.com Premium</span> <span class="mx-1">|</span>
                       <span style="font-size: 80%;" class="font-weight-light">
                         {{ if not .Premium.Active }}
                           Free Tier
@@ -383,7 +380,7 @@
                       <div class="my-2">
                         <span class="text-muted" style="margin-left: 12px; margin-right: 12px;">
                           {{ if not .Premium.Active }}
-                            Premium features for your beaconcha.in explorer and <a href="/mobile">beaconcha.in mobile app</a> experience. No ads, support for more validators and more.
+                            Premium features for your beacon.stratisevm.com explorer and <a href="/mobile">beacon.stratisevm.com mobile app</a> experience. No ads, support for more validators and more.
                           {{ else }}
                             Your premium subscription is active. Thank you for supporting us!
                           {{ end }}
@@ -463,7 +460,7 @@
                   </div>
                   <div class="card-body">
                     <span
-                      >Monitor your staking machine via the mobile app. Learn more <a href="https://kb.beaconcha.in/mobile-app-less-than-greater-than-beacon-node"><b>here</b></a
+                      >Monitor your staking machine via the mobile app. Learn more <a href="https://kb.beacon.stratisevm.com/mobile-app-less-than-greater-than-beacon-node"><b>here</b></a
                       >.</span
                     ><br /><br />
 
@@ -515,7 +512,7 @@
                           <div id="collapsePrysm" class="collapse" aria-labelledby="headingPrysm" data-parent="#accordionExample" style="margin: 15px;">
                             <div class="accordion-body">
                               <h4>1. Install Metric Exporter</h4>
-                              Download the latest beaconcha.in metrics exporter on your machine:<br /><br />
+                              Download the latest beacon.stratisevm.com metrics exporter on your machine:<br /><br />
 
                               <div style="margin-left: 5px; margin-right: 5px;">
                                 <div style="float: left; width: 90%;">
@@ -576,7 +573,7 @@
                               <br />
 
                               <h4>2. Install Metric Exporter</h4>
-                              Download the latest beaconcha.in metrics exporter on your machine:<br /><br />
+                              Download the latest beacon.stratisevm.com metrics exporter on your machine:<br /><br />
 
                               <div style="margin-left: 5px; margin-right: 5px;">
                                 <div style="float: left;  width: 90%;">

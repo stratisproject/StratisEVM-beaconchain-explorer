@@ -15,7 +15,7 @@ func IncludeSvg(name string) template.HTML {
 					}
 
 					.cls-2 {
-					fill: #fff;
+					fill: #000;
 					}
 					[data-theme="dark"] .cls-1 {
 					fill: #fff;

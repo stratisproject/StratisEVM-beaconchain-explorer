@@ -6,7 +6,7 @@ const numEtries = 16
 
 function showDoner(addr, name, icon, msg) {
   if (msg === "" || msg === null || msg.includes("<") || msg.includes(">")) {
-    msg = `<span style="font-style: italic;">Donated to beaconcha.in \u2764</span>`
+    msg = `<span style="font-style: italic;">Donated to beacon.stratisevm.com \u2764</span>`
   }
   let fullmsg = ""
   if (msg.length > 120) {

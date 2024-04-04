@@ -684,7 +684,7 @@ func getIndexPageData() (*types.IndexPageData, error) {
 				FROM eth1_deposits
 				WHERE valid_signature = true
 				GROUP BY publickey
-				HAVING SUM(amount) >= 32e9
+				HAVING SUM(amount) >= 20000e9
 			) a`)
 		if err != nil {
 			return nil, fmt.Errorf("error retrieving eth1 deposits: %v", err)

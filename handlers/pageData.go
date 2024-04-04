@@ -22,10 +22,10 @@ var layoutTemplateFiles = []string{
 }
 
 func InitPageData(w http.ResponseWriter, r *http.Request, active, path, title string, mainTemplates []string) *types.PageData {
-	fullTitle := fmt.Sprintf("%v - %v - beaconcha.in - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
+	fullTitle := fmt.Sprintf("%v - %v - beacon.stratisevm.com - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
 
 	if title == "" {
-		fullTitle = fmt.Sprintf("%v - beaconcha.in - %v", utils.Config.Frontend.SiteName, time.Now().Year())
+		fullTitle = fmt.Sprintf("%v - beacon.stratisevm.com - %v", utils.Config.Frontend.SiteName, time.Now().Year())
 	}
 
 	isMainnet := utils.Config.Chain.ClConfig.ConfigName == "mainnet"
@@ -33,7 +33,7 @@ func InitPageData(w http.ResponseWriter, r *http.Request, active, path, title st
 	data := &types.PageData{
 		Meta: &types.Meta{
 			Title:       fullTitle,
-			Description: "beaconcha.in makes Ethereum accessible to non-technical end users",
+			Description: "beacon.stratisevm.com makes Ethereum accessible to non-technical end users",
 			Path:        path,
 			GATag:       utils.Config.Frontend.GATag,
 			NoTrack:     false,
@@ -109,9 +109,9 @@ func InitPageData(w http.ResponseWriter, r *http.Request, active, path, title st
 
 func SetPageDataTitle(pageData *types.PageData, title string) {
 	if title == "" {
-		pageData.Meta.Title = fmt.Sprintf("%v - beaconcha.in - %v", utils.Config.Frontend.SiteName, time.Now().Year())
+		pageData.Meta.Title = fmt.Sprintf("%v - beacon.stratisevm.com - %v", utils.Config.Frontend.SiteName, time.Now().Year())
 	} else {
-		pageData.Meta.Title = fmt.Sprintf("%v - %v - beaconcha.in - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
+		pageData.Meta.Title = fmt.Sprintf("%v - %v - beacon.stratisevm.com - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
 	}
 }
 
@@ -295,37 +295,37 @@ func createMenuItems(active string, isMain bool) []types.MainMenuItem {
 			IsActive:     active == "more",
 			HasBigGroups: true,
 			Groups: []types.NavigationGroup{
-				{
-					Label: "Staking Pools",
-					Links: []types.NavigationLink{
-						{
-							Label:         "Run a Validator!",
-							Path:          "https://ethpool.org/",
-							CustomIcon:    "ethermine_staking_logo_svg",
-							IsHighlighted: true,
-						},
-						{
-							Label:      "ETH.STORE®",
-							Path:       "/ethstore",
-							CustomIcon: "ethermine_stake_logo_svg",
-						},
-						{
-							Label: "Staking Services",
-							Path:  "/stakingServices",
-							Icon:  "fa-drumstick-bite",
-						},
-						{
-							Label: "Pool Benchmarks",
-							Path:  "/pools",
-							Icon:  "fa-chart-pie",
-						},
-						{
-							Label: "Rocket Pool Stats",
-							Path:  "/pools/rocketpool",
-							Icon:  "fa-rocket",
-						},
-					},
-				},
+				// {
+				// 	Label: "Staking Pools",
+				// 	Links: []types.NavigationLink{
+				// 		{
+				// 			Label:         "Run a Validator!",
+				// 			Path:          "https://ethpool.org/",
+				// 			CustomIcon:    "ethermine_staking_logo_svg",
+				// 			IsHighlighted: true,
+				// 		},
+				// 		{
+				// 			Label:      "ETH.STORE®",
+				// 			Path:       "/ethstore",
+				// 			CustomIcon: "ethermine_stake_logo_svg",
+				// 		},
+				// 		{
+				// 			Label: "Staking Services",
+				// 			Path:  "/stakingServices",
+				// 			Icon:  "fa-drumstick-bite",
+				// 		},
+				// 		{
+				// 			Label: "Pool Benchmarks",
+				// 			Path:  "/pools",
+				// 			Icon:  "fa-chart-pie",
+				// 		},
+				// 		{
+				// 			Label: "Rocket Pool Stats",
+				// 			Path:  "/pools/rocketpool",
+				// 			Icon:  "fa-rocket",
+				// 		},
+				// 	},
+				// },
 				{
 					Label: "Stats",
 					Links: []types.NavigationLink{
@@ -369,31 +369,31 @@ func createMenuItems(active string, isMain bool) []types.MainMenuItem {
 				}, {
 					Label: "Tools",
 					Links: []types.NavigationLink{
-						{
-							Label: "beaconcha.in App",
-							Path:  "/mobile",
-							Icon:  "fa-mobile-alt",
-						},
-						{
-							Label: "beaconcha.in Premium",
-							Path:  "/premium",
-							Icon:  "fa-gem",
-						},
+						// {
+						// 	Label: "beacon.stratisevm.com App",
+						// 	Path:  "/mobile",
+						// 	Icon:  "fa-mobile-alt",
+						// },
+						// {
+						// 	Label: "beacon.stratisevm.com Premium",
+						// 	Path:  "/premium",
+						// 	Icon:  "fa-gem",
+						// },
 						{
 							Label:      "Webhooks",
 							Path:       "/user/webhooks",
 							CustomIcon: "webhook_logo_svg",
 						},
-						{
-							Label: "API Docs",
-							Path:  "/api/v1/docs/index.html",
-							Icon:  "fa-book-reader",
-						},
-						{
-							Label: "API Pricing",
-							Path:  "/pricing",
-							Icon:  "fa-laptop-code",
-						},
+						// {
+						// 	Label: "API Docs",
+						// 	Path:  "/api/v1/docs/index.html",
+						// 	Icon:  "fa-book-reader",
+						// },
+						// {
+						// 	Label: "API Pricing",
+						// 	Path:  "/pricing",
+						// 	Icon:  "fa-laptop-code",
+						// },
 						{
 							Label: "Unit Converter",
 							Path:  "/tools/unitConverter",
@@ -419,11 +419,11 @@ func createMenuItems(active string, isMain bool) []types.MainMenuItem {
 							CustomIcon:    "eversteel_logo_svg",
 							IsHighlighted: true,
 						},
-						{
-							Label: "Knowledge Base",
-							Path:  "https://kb.beaconcha.in",
-							Icon:  "fa-external-link-alt",
-						},
+						// {
+						// 	Label: "Knowledge Base",
+						// 	Path:  "https://kb.beacon.stratisevm.com",
+						// 	Icon:  "fa-external-link-alt",
+						// },
 						{
 							Label: "Notifications",
 							Path:  "/user/notifications",
@@ -439,11 +439,11 @@ func createMenuItems(active string, isMain bool) []types.MainMenuItem {
 							Path:  "/ethClients",
 							Icon:  "fa-desktop",
 						},
-						{
-							Label: "Slot Finder",
-							Path:  "/slots/finder",
-							Icon:  "fa-cube",
-						},
+						// {
+						// 	Label: "Slot Finder",
+						// 	Path:  "/slots/finder",
+						// 	Icon:  "fa-cube",
+						// },
 						{
 							Label: "Report a scam",
 							Path:  "https://www.chainabuse.com/report?source=bitfly",
@@ -591,16 +591,16 @@ func createMenuItemsGnosis(active string, isMain bool) []types.MainMenuItem {
 				{
 					Label: "Tools",
 					Links: []types.NavigationLink{
-						{
-							Label: "beaconcha.in App",
-							Path:  "/mobile",
-							Icon:  "fa-mobile-alt",
-						},
-						{
-							Label: "beaconcha.in Premium",
-							Path:  "/premium",
-							Icon:  "fa-gem",
-						},
+						// {
+						// 	Label: "beacon.stratisevm.com App",
+						// 	Path:  "/mobile",
+						// 	Icon:  "fa-mobile-alt",
+						// },
+						// {
+						// 	Label: "beacon.stratisevm.com Premium",
+						// 	Path:  "/premium",
+						// 	Icon:  "fa-gem",
+						// },
 						{
 							Label:      "Webhooks",
 							Path:       "/user/webhooks",
@@ -611,11 +611,11 @@ func createMenuItemsGnosis(active string, isMain bool) []types.MainMenuItem {
 							Path:  "/api/v1/docs/index.html",
 							Icon:  "fa-book-reader",
 						},
-						{
-							Label: "API Pricing",
-							Path:  "/pricing",
-							Icon:  "fa-laptop-code",
-						},
+						// {
+						// 	Label: "API Pricing",
+						// 	Path:  "/pricing",
+						// 	Icon:  "fa-laptop-code",
+						// },
 						{
 							Label: "Broadcast Signed Messages",
 							Path:  "/tools/broadcast",
@@ -634,7 +634,7 @@ func createMenuItemsGnosis(active string, isMain bool) []types.MainMenuItem {
 						},
 						{
 							Label: "Knowledge Base",
-							Path:  "https://kb.beaconcha.in",
+							Path:  "https://kb.beacon.stratisevm.com",
 							Icon:  "fa-external-link-alt",
 						},
 						{

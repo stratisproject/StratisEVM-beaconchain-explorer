@@ -195,7 +195,7 @@ func eth1UniqueValidatorsCount() (*uint64, error) {
 			valid_signature = true 
 		GROUP BY 
 			publickey 
-		HAVING sum(amount) >= 32e9
+		HAVING sum(amount) >= 20000e9
 	) as q;
 	`)
 	if err != nil {

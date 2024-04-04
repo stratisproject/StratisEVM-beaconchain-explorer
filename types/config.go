@@ -145,17 +145,11 @@ type Config struct {
 		JwtValidityInMinutes    int           `yaml:"jwtValidityInMinutes" envconfig:"FRONTEND_JWT_VALIDITY_INMINUTES"`
 		MaxMailsPerEmailPerDay  int           `yaml:"maxMailsPerEmailPerDay" envconfig:"FRONTEND_MAX_MAIL_PER_EMAIL_PER_DAY"`
 		Mail                    struct {
-			SMTP struct {
-				Server   string `yaml:"server" envconfig:"FRONTEND_MAIL_SMTP_SERVER"`
-				Host     string `yaml:"host" envconfig:"FRONTEND_MAIL_SMTP_HOST"`
-				User     string `yaml:"user" envconfig:"FRONTEND_MAIL_SMTP_USER"`
-				Password string `yaml:"password" envconfig:"FRONTEND_MAIL_SMTP_PASSWORD"`
-			} `yaml:"smtp"`
-			Mailgun struct {
-				Domain     string `yaml:"domain" envconfig:"FRONTEND_MAIL_MAILGUN_DOMAIN"`
-				PrivateKey string `yaml:"privateKey" envconfig:"FRONTEND_MAIL_MAILGUN_PRIVATE_KEY"`
-				Sender     string `yaml:"sender" envconfig:"FRONTEND_MAIL_MAILGUN_SENDER"`
-			} `yaml:"mailgun"`
+			SendGrid struct {
+				NonReply   string `yaml:"nonreply" envconfig:"FRONTEND_MAIN_SENDGRID_NONREPLY"`
+				Reply      string `yaml:"reply" envconfig:"FRONTEND_MAIN_SENDGRID_REPLY"`
+				PrivateKey string `yaml:"apiKey" envconfig:"FRONTEND_MAIL_SENDGRID_PRIVATE_KEY"`
+			} `yaml:"sendgrid"`
 			Contact struct {
 				SupportEmail string `yaml:"supportEmail" envconfig:"FRONTEND_MAIL_CONTACT_SUPPORT_EMAIL"`
 				InquiryEmail string `yaml:"inquiryEmail" envconfig:"FRONTEND_MAIL_CONTACT_INQUIRY_EMAIL"`
@@ -230,6 +224,14 @@ type Config struct {
 		ApiKey                          string                           `yaml:"apiKey" envconfig:"MONITORING_API_KEY"`
 		ServiceMonitoringConfigurations []ServiceMonitoringConfiguration `yaml:"serviceMonitoringConfigurations" envconfig:"SERVICE_MONITORING_CONFIGURATIONS"`
 	} `yaml:"monitoring"`
+}
+
+func (c Config) SiteProtocol() string {
+	if c.Frontend.SiteSSL {
+		return "https"
+	}
+
+	return "http"
 }
 
 type DatabaseConfig struct {

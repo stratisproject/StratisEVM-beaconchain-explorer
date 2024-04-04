@@ -2099,7 +2099,7 @@ func (n *ethClientNotification) GetInfo(includeUrl bool) string {
 		case "Lodestar":
 			url = "https://github.com/chainsafe/lodestar/releases"
 		default:
-			url = "https://beaconcha.in/ethClients"
+			url = "https://beacon.stratisevm.com/ethClients"
 		}
 
 		return generalPart + " " + url
@@ -2139,7 +2139,7 @@ func (n *ethClientNotification) GetInfoMarkdown() string {
 	case "Lodestar":
 		url = "https://github.com/chainsafe/lodestar/releases"
 	default:
-		url = "https://beaconcha.in/ethClients"
+		url = "https://beacon.stratisevm.com/ethClients"
 	}
 
 	generalPart := fmt.Sprintf(`A new version for [%s](%s) is available.`, n.EthClient, url)

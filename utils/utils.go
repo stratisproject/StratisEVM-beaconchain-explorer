@@ -432,7 +432,7 @@ func ReadConfig(cfg *types.Config, path string) error {
 	}
 
 	if cfg.Frontend.SiteBrand == "" {
-		cfg.Frontend.SiteBrand = "beaconcha.in"
+		cfg.Frontend.SiteBrand = "beacon.stratisevm.com"
 	}
 
 	if cfg.Chain.ClConfigPath == "" {
@@ -716,8 +716,8 @@ func ReadConfig(cfg *types.Config, path string) error {
 			cfg.Frontend.ClCurrencyDecimals = 18
 			cfg.Frontend.ClCurrencyDivisor = 1e9
 		default:
-			cfg.Frontend.MainCurrency = "ETH"
-			cfg.Frontend.ClCurrency = "ETH"
+			cfg.Frontend.MainCurrency = "STRAX"
+			cfg.Frontend.ClCurrency = "STRAX"
 			cfg.Frontend.ClCurrencyDecimals = 18
 			cfg.Frontend.ClCurrencyDivisor = 1e9
 		}
@@ -730,18 +730,18 @@ func ReadConfig(cfg *types.Config, path string) error {
 			cfg.Frontend.ElCurrencyDecimals = 18
 			cfg.Frontend.ElCurrencyDivisor = 1e18
 		default:
-			cfg.Frontend.ElCurrency = "ETH"
+			cfg.Frontend.ElCurrency = "STRAX"
 			cfg.Frontend.ElCurrencyDecimals = 18
 			cfg.Frontend.ElCurrencyDivisor = 1e18
 		}
 	}
 
 	if cfg.Frontend.SiteTitle == "" {
-		cfg.Frontend.SiteTitle = "Open Source Ethereum Explorer"
+		cfg.Frontend.SiteTitle = "Open Source Stratis Explorer"
 	}
 
 	if cfg.Frontend.Keywords == "" {
-		cfg.Frontend.Keywords = "open source ethereum block explorer, ethereum block explorer, beacon chain explorer, ethereum blockchain explorer"
+		cfg.Frontend.Keywords = "open source stratis block explorer, stratis block explorer, beacon chain explorer, stratis blockchain explorer"
 	}
 
 	if cfg.Chain.Id != 0 {
@@ -1158,7 +1158,7 @@ func ElementExists(arr []string, el string) bool {
 }
 
 func TryFetchContractMetadata(address []byte) (*types.ContractMetadata, error) {
-	return getABIFromEtherscan(address)
+	return getABIFromExplorer(address)
 }
 
 // func getABIFromSourcify(address []byte) (*types.ContractMetadata, error) {
@@ -1204,10 +1204,9 @@ func TryFetchContractMetadata(address []byte) (*types.ContractMetadata, error) {
 // 	}
 // }
 
-func GetEtherscanAPIBaseUrl(provideDefault bool) string {
-	const mainnetBaseUrl = "api.etherscan.io"
-	const goerliBaseUrl = "api-goerli.etherscan.io"
-	const sepoliaBaseUrl = "api-sepolia.etherscan.io"
+func GetExplorerAPIBaseUrl(provideDefault bool) string {
+	const mainnetBaseUrl = "explorer.stratisevm.com"
+	const auroriaBaseUrl = "auroria.explorer.stratisevm.com"
 
 	// check config first
 	if len(Config.EtherscanAPIBaseURL) > 0 {
@@ -1216,12 +1215,10 @@ func GetEtherscanAPIBaseUrl(provideDefault bool) string {
 
 	// check chain id
 	switch Config.Chain.ClConfig.DepositChainID {
-	case 1: // mainnet
+	case 105105: // Stratis
 		return mainnetBaseUrl
-	case 5: // goerli
-		return goerliBaseUrl
-	case 11155111: // sepolia
-		return sepoliaBaseUrl
+	case 205205: // Auroria
+		return auroriaBaseUrl
 	}
 
 	// use default
@@ -1231,8 +1228,8 @@ func GetEtherscanAPIBaseUrl(provideDefault bool) string {
 	return ""
 }
 
-func getABIFromEtherscan(address []byte) (*types.ContractMetadata, error) {
-	baseUrl := GetEtherscanAPIBaseUrl(false)
+func getABIFromExplorer(address []byte) (*types.ContractMetadata, error) {
+	baseUrl := GetExplorerAPIBaseUrl(false)
 	if len(baseUrl) < 1 {
 		return nil, nil
 	}
@@ -1371,7 +1368,7 @@ func FormatEthstoreComparison(pool string, val float64) template.HTML {
 		ou = "outperforms"
 	}
 
-	return template.HTML(fmt.Sprintf(`<sub title="%s %s the ETH.STORE® indicator by %s%.2f%%" data-toggle="tooltip" class="%s">(%s%.2f%%)</sub>`, pool, ou, prefix, val, textClass, prefix, val))
+	return template.HTML(fmt.Sprintf(`<sub title="%s %s the STRAX.STORE® indicator by %s%.2f%%" data-toggle="tooltip" class="%s">(%s%.2f%%)</sub>`, pool, ou, prefix, val, textClass, prefix, val))
 }
 
 func FormatPoolPerformance(val float64) template.HTML {
@@ -1396,7 +1393,7 @@ func isMaliciousToken(symbol string) bool {
 	containsUrls := len(xurls.Relaxed.FindAllString(symbol, -1)) > 0
 	isConfusable := len(confusables.IsConfusable(symbol, false, []string{"LATIN", "COMMON"})) > 0
 	isMixedScript := confusables.IsMixedScript(symbol, nil)
-	return containsUrls || isConfusable || isMixedScript || strings.ToUpper(symbol) == "ETH"
+	return containsUrls || isConfusable || isMixedScript || strings.ToUpper(symbol) == "STRAX"
 }
 
 func ReverseSlice[S ~[]E, E any](s S) {

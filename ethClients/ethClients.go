@@ -226,13 +226,13 @@ func updateEthClient() {
 	defer bannerClientsMux.Unlock()
 	bannerClients = []clientUpdateInfo{}
 	updateEthClientNetShare()
-	ethClients.Geth.ClientReleaseVersion, ethClients.Geth.ClientReleaseDate = prepareEthClientData("/ethereum/go-ethereum", "Geth", curTime)
+	ethClients.Geth.ClientReleaseVersion, ethClients.Geth.ClientReleaseDate = prepareEthClientData("/stratisproject/go-stratis", "Geth", curTime)
 	ethClients.Nethermind.ClientReleaseVersion, ethClients.Nethermind.ClientReleaseDate = prepareEthClientData("/NethermindEth/nethermind", "Nethermind", curTime)
 	ethClients.Besu.ClientReleaseVersion, ethClients.Besu.ClientReleaseDate = prepareEthClientData("/hyperledger/besu", "Besu", curTime)
 	ethClients.Erigon.ClientReleaseVersion, ethClients.Erigon.ClientReleaseDate = prepareEthClientData("/ledgerwatch/erigon", "Erigon", curTime)
 
 	ethClients.Teku.ClientReleaseVersion, ethClients.Teku.ClientReleaseDate = prepareEthClientData("/ConsenSys/teku", "Teku", curTime)
-	ethClients.Prysm.ClientReleaseVersion, ethClients.Prysm.ClientReleaseDate = prepareEthClientData("/prysmaticlabs/prysm", "Prysm", curTime)
+	ethClients.Prysm.ClientReleaseVersion, ethClients.Prysm.ClientReleaseDate = prepareEthClientData("/stratisproject/prysm-stratis", "Prysm", curTime)
 	ethClients.Nimbus.ClientReleaseVersion, ethClients.Nimbus.ClientReleaseDate = prepareEthClientData("/status-im/nimbus-eth2", "Nimbus", curTime)
 	ethClients.Lighthouse.ClientReleaseVersion, ethClients.Lighthouse.ClientReleaseDate = prepareEthClientData("/sigp/lighthouse", "Lighthouse", curTime)
 	ethClients.Lodestar.ClientReleaseVersion, ethClients.Lodestar.ClientReleaseDate = prepareEthClientData("/chainsafe/lodestar", "Lodestar", curTime)

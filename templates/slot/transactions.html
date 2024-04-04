@@ -9,7 +9,7 @@
         <div class="row border-bottom p-1 mx-0">
           <div class="col-md-2"><span data-toggle="tooltip" data-placement="top" title="Transaction hash">Transaction hash:</span></div>
           <div class="col-md-10 text-monospace text-break">
-            <a href="/tx/0x{{ printf "%x" $transaction.TxHash }}">0x{{ printf "%x" $transaction.TxHash }}</a>
+            <a href="/tx/0x{{ printf " %x" $transaction.TxHash }}">0x{{ printf "%x" $transaction.TxHash }}</a>
           </div>
         </div>
         <div class="row border-bottom p-1 mx-0">
@@ -38,7 +38,7 @@
         </div>
         <div class="row border-bottom p-1 mx-0">
           <div class="col-md-2"><span data-toggle="tooltip" data-placement="top" title="Transaction value">Amount:</span></div>
-          <div class="col-md-10 text-monospace text-break">{{ $transaction.AmountPretty }} ETH</div>
+          <div class="col-md-10 text-monospace text-break">{{ $transaction.AmountPretty }} STRAX</div>
         </div>
         <div class="row border-bottom p-1 mx-0">
           <div class="col-md-2"><span data-toggle="tooltip" data-placement="top" title="Transaction payload">Payload:</span></div>

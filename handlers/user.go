@@ -1246,14 +1246,14 @@ func sendEmailUpdateConfirmation(userId uint64, newEmail string) error {
 	subject := fmt.Sprintf("%s: Verify your email-address", utils.Config.Frontend.SiteDomain)
 	msg := fmt.Sprintf(`To update your email on %[1]s please verify it by clicking this link:
 
-https://%[1]s/settings/email/%[2]s
+%[2]s://%[1]s/settings/email/%[3]s
 
 This link will expire in 30 minutes.
 
 Best regards,
 
 %[1]s
-`, utils.Config.Frontend.SiteDomain, emailConfirmationHash)
+`, utils.Config.Frontend.SiteDomain, utils.Config.SiteProtocol(), emailConfirmationHash)
 	err = mail.SendTextMail(newEmail, subject, msg, []types.EmailAttachment{})
 	if err != nil {
 		return err

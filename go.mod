@@ -39,7 +39,6 @@ require (
 	github.com/kataras/i18n v0.0.5
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lib/pq v1.10.7
-	github.com/mailgun/mailgun-go/v4 v4.1.3
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/mssola/user_agent v0.5.2
 	github.com/mvdan/xurls v1.1.0
@@ -53,6 +52,7 @@ require (
 	github.com/prysmaticlabs/prysm/v3 v3.2.2
 	github.com/rocket-pool/rocketpool-go v1.8.2
 	github.com/rocket-pool/smartnode v1.11.0
+	github.com/sendgrid/sendgrid-go v3.14.0+incompatible
 	github.com/shopspring/decimal v1.3.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
@@ -186,6 +186,7 @@ require (
 	github.com/prysmaticlabs/gohashtree v0.0.2-alpha // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
+	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/wealdtech/go-bytesutil v1.2.1 // indirect
 	github.com/wealdtech/go-merkletree v1.0.1-0.20190605192610-2bb163c2ea2a // indirect
@@ -220,7 +221,6 @@ require (
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/ferranbt/fastssz v0.1.3 // indirect
-	github.com/go-chi/chi v4.0.2+incompatible // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.20.0 // indirect

@@ -108,7 +108,14 @@
 {{ define "content" }}
   {{ with .Data }}
     {{ if ne .FlashMessage "" }}
-      <div class="alert container mt-2 {{ if contains .FlashMessage "Error" }}alert-danger{{ else }}alert-success{{ end }} alert-dismissible fade show my-3 py-2" role="alert">
+      <div
+        class="alert container mt-2 {{ if contains .FlashMessage " Error" }}
+          alert-danger
+        {{ else }}
+          alert-success
+        {{ end }}
+  alert-dismissible fade show my-3 py-2"
+        role="alert">
         <div class="p-2">{{ .FlashMessage | formatHTML }}</div>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -193,7 +200,7 @@
                 <div class="col-md-4 mb-3 mb-md-0 feature-entry">
                   <div class="h1 feature-icon"><i class="fas fa-vial"></i></div>
                   <div class="h5 text-muted feature-text-container">
-                    <span class="feature-text"> Compatible with ethereum 2 testnets </span>
+                    <span class="feature-text"> Compatible with stratis 2 testnets </span>
                   </div>
                 </div>
                 <div class="col-md-4 mb-3 mb-md-0 feature-entry">
@@ -225,7 +232,7 @@
                     <img src="img/mobile/validators.png" class="screenshot-small zoom" />
                   </div>
                   <div class="h5 text-muted spotlight-text-container">
-                    <span class="spotlight-text"> Easily add your validators or search for any on the Ethereum network. </span>
+                    <span class="spotlight-text"> Easily add your validators or search for any on the Stratis network. </span>
                   </div>
                 </div>
 

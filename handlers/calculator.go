@@ -23,7 +23,7 @@ func StakingCalculator(w http.ResponseWriter, r *http.Request) {
 	}
 
 	calculatorPageData.TotalStaked = total
-	calculatorPageData.EtherscanApiBaseUrl = utils.GetEtherscanAPIBaseUrl(true)
+	calculatorPageData.ExplorerApiBaseUrl = utils.GetExplorerAPIBaseUrl(true)
 
 	w.Header().Set("Content-Type", "text/html")
 

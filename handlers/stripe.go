@@ -84,11 +84,11 @@ func StripeCreateCheckoutSession(w http.ResponseWriter, r *http.Request) {
 	enabled := true
 	auto := "auto"
 
-	var successUrl = stripe.String("https://" + utils.Config.Frontend.SiteDomain + "/user/settings#api")
-	var cancelUrl = stripe.String("https://" + utils.Config.Frontend.SiteDomain + "/pricing")
+	var successUrl = stripe.String(utils.Config.SiteProtocol() + "://" + utils.Config.Frontend.SiteDomain + "/user/settings#api")
+	var cancelUrl = stripe.String(utils.Config.SiteProtocol() + "://" + utils.Config.Frontend.SiteDomain + "/pricing")
 	if purchaseGroup == utils.GROUP_MOBILE {
-		successUrl = stripe.String("https://" + utils.Config.Frontend.SiteDomain + "/user/settings#account")
-		cancelUrl = stripe.String("https://" + utils.Config.Frontend.SiteDomain + "/premium")
+		successUrl = stripe.String(utils.Config.SiteProtocol() + "://" + utils.Config.Frontend.SiteDomain + "/user/settings#account")
+		cancelUrl = stripe.String(utils.Config.SiteProtocol() + "://" + utils.Config.Frontend.SiteDomain + "/premium")
 	}
 
 	params := &stripe.CheckoutSessionParams{

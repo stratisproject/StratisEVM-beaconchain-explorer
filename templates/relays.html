@@ -1,18 +1,18 @@
 {{ define "js" }}
   <script type="text/javascript" src="/js/bootstrap4-toggle.min.js"></script>
-  <script>
-    const collection = document.querySelectorAll(".convertmetoutf8")
-    collection.forEach((element) => {
-      // convert to utf8
-      viewHexDataAs(element.id, "utf-8")
-    })
+<script>
+  const collection = document.querySelectorAll(".convertmetoutf8")
+  collection.forEach((element) => {
+    // convert to utf8
+    viewHexDataAs(element.id, "utf-8")
+  })
 
-    {{ if len .RelaysInfoContainers }}
-      const relays = {{ .RelaysInfoContainers }}
-      activateTabbarSwitcher("poolTable", "poolTabs", `t${relays[0].Days}d`)
-    {{ end }}
-    activateTabbarSwitcher("blocksTable", "blockTabs", "latest_blocks")
-  </script>
+  {{ if len.RelaysInfoContainers }}
+    const relays = {{.RelaysInfoContainers}}
+    activateTabbarSwitcher("poolTable", "poolTabs", `t${relays[0].Days}d`)
+  {{ end }}
+  activateTabbarSwitcher("blocksTable", "blockTabs", "latest_blocks")
+</script>
 {{ end }}
 
 {{ define "css" }}
@@ -65,9 +65,9 @@
                           {{ end }}
                           <td>{{ .BlockCount }} ({{ formatPercentageWithPrecision .NetworkUsage 2 }}%)</td>
                           <td>{{ .UniqueBuilders }}</td>
-                          <td>{{ formatAmount .AverageValue.BigInt "ETH" 8 }}</td>
-                          <td>{{ formatAmount .MaxValue.BigInt "ETH" 8 }} (Slot {{ formatBlockSlot .MaxValueSlot }})</td>
-                          <td>{{ formatAmount .TotalValue.BigInt "ETH" 8 }}</td>
+                          <td>{{ formatAmount .AverageValue.BigInt "STRAX" 8 }}</td>
+                          <td>{{ formatAmount .MaxValue.BigInt "STRAX" 8 }} (Slot {{ formatBlockSlot .MaxValueSlot }})</td>
+                          <td>{{ formatAmount .TotalValue.BigInt "STRAX" 8 }}</td>
                           {{ if .Censors.Valid }}
                             <td>{{ formatYesNo (not .Censors.Bool) }}</td>
                           {{ else }}
@@ -125,7 +125,7 @@
                             </span>
                           {{ end }}
                         </td>
-                        <td>{{ formatAmount .Value.BigInt "ETH" 8 }}</td>
+                        <td>{{ formatAmount .Value.BigInt "STRAX" 8 }}</td>
                         <td>
                           <span class="convertmetoutf8" id="slot_{{ .Slot }}" aria-hex-data="{{ .BlockExtraData }}"></span>
                         </td>
@@ -161,7 +161,7 @@
                             </span>
                           {{ end }}
                         </td>
-                        <td>{{ formatAmount .Value.BigInt "ETH" 8 }}</td>
+                        <td>{{ formatAmount .Value.BigInt "STRAX" 8 }}</td>
                         <td>
                           <span class="convertmetoutf8" id="slot_{{ .Slot }}" aria-hex-data="{{ .BlockExtraData }}"></span>
                         </td>

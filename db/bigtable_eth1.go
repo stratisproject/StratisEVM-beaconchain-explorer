@@ -2762,6 +2762,90 @@ func (bigtable *Bigtable) GetAddressInternalTableData(address []byte, pageToken 
 	return data, nil
 }
 
+func (bigtable *Bigtable) GetInternalTransfersForTransactionWithoutTrace(transaction []byte, from []byte) ([]types.ITransaction, error) {
+
+	tmr := time.AfterFunc(REPORT_TIMEOUT, func() {
+		logger.WithFields(logrus.Fields{
+			"transaction": transaction,
+			"from":        from,
+		}).Warnf("%s call took longer than %v", utils.GetCurrentFuncName(), REPORT_TIMEOUT)
+	})
+	defer tmr.Stop()
+
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Second*30))
+	defer cancel()
+
+	transfers := map[int]*types.Eth1InternalTransactionIndexed{}
+	mux := sync.Mutex{}
+
+	prefix := fmt.Sprintf("%s:ITX:%x:", bigtable.chainId, transaction)
+	rowRange := gcp_bigtable.NewRange(prefix+"\x00", prefixSuccessor(prefix, 3))
+
+	err := bigtable.tableData.ReadRows(ctx, rowRange, func(row gcp_bigtable.Row) bool {
+		b := &types.Eth1InternalTransactionIndexed{}
+		row_ := row[DEFAULT_FAMILY][0]
+		err := proto.Unmarshal(row_.Value, b)
+		if err != nil {
+			logrus.Fatalf("error parsing Eth1InternalTransactionIndexed data: %v", err)
+			return false
+		}
+		// geth traces include the initial transfer & zero-value staticalls
+		if bytes.Equal(b.From, from) || bytes.Equal(b.Value, []byte{}) {
+			return true
+		}
+		rowN, err := strconv.Atoi(strings.Split(row_.Row, ":")[3])
+		if err != nil {
+			logrus.Fatalf("error parsing Eth1InternalTransactionIndexed row number: %v", err)
+			return false
+		}
+		rowN = 100000 - rowN
+		mux.Lock()
+		transfers[rowN] = b
+		mux.Unlock()
+		return true
+	}, gcp_bigtable.LimitRows(256))
+
+	if err != nil {
+		return nil, err
+	}
+
+	names := make(map[string]string)
+	for _, t := range transfers {
+		names[string(t.From)] = ""
+		names[string(t.To)] = ""
+	}
+
+	err = bigtable.GetAddressNames(names)
+	if err != nil {
+		return nil, err
+	}
+
+	data := make([]types.ITransaction, len(transfers))
+
+	// sort by event id
+	keys := make([]int, 0, len(transfers))
+	for k := range transfers {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+
+	for i, k := range keys {
+		t := transfers[k]
+
+		fromName := names[string(t.From)]
+		toName := names[string(t.To)]
+		from := utils.FormatAddress(t.From, nil, fromName, false, false, true)
+		to := utils.FormatAddress(t.To, nil, toName, false, false, true)
+
+		data[i] = types.ITransaction{
+			From:   from,
+			To:     to,
+			Amount: utils.FormatBytesAmount(t.Value, utils.Config.Frontend.ElCurrency, 8),
+		}
+	}
+	return data, nil
+}
+
 func (bigtable *Bigtable) GetInternalTransfersForTransaction(transaction []byte, from []byte, parityTrace []*rpc.ParityTraceResult, currency string) ([]types.ITransaction, error) {
 
 	names := make(map[string]string)

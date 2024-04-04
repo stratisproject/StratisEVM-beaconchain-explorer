@@ -1,18 +1,18 @@
 {{ define "js" }}
   <script type="text/javascript" src="/js/bootstrap4-toggle.min.js"></script>
-<script>
-  const collection = document.querySelectorAll(".convertmetoutf8")
-  collection.forEach((element) => {
-    // convert to utf8
-    viewHexDataAs(element.id, "utf-8")
-  })
+  <script>
+    const collection = document.querySelectorAll(".convertmetoutf8")
+    collection.forEach((element) => {
+      // convert to utf8
+      viewHexDataAs(element.id, "utf-8")
+    })
 
-  {{ if len.RelaysInfoContainers }}
-    const relays = {{.RelaysInfoContainers}}
-    activateTabbarSwitcher("poolTable", "poolTabs", `t${relays[0].Days}d`)
-  {{ end }}
-  activateTabbarSwitcher("blocksTable", "blockTabs", "latest_blocks")
-</script>
+    {{ if len .RelaysInfoContainers }}
+      const relays = {{ .RelaysInfoContainers }}
+      activateTabbarSwitcher("poolTable", "poolTabs", `t${relays[0].Days}d`)
+    {{ end }}
+    activateTabbarSwitcher("blocksTable", "blockTabs", "latest_blocks")
+  </script>
 {{ end }}
 
 {{ define "css" }}

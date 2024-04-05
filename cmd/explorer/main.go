@@ -494,7 +494,7 @@ func main() {
 
 			router.HandleFunc("/ethstore", handlers.EthStore).Methods("GET")
 
-			router.HandleFunc("/stakingServices", handlers.StakingServices).Methods("GET")
+			// router.HandleFunc("/stakingServices", handlers.StakingServices).Methods("GET")
 
 			router.HandleFunc("/ethClients", handlers.EthClientsServices).Methods("GET")
 			router.HandleFunc("/pools", handlers.Pools).Methods("GET")
@@ -533,9 +533,9 @@ func main() {
 			signUpRouter.HandleFunc("/reset/{hash}", handlers.ResetPassword).Methods("GET")
 			signUpRouter.HandleFunc("/confirm/{hash}", handlers.ConfirmEmail).Methods("GET")
 			signUpRouter.HandleFunc("/confirmation", handlers.Confirmation).Methods("GET")
-			signUpRouter.HandleFunc("/pricing", handlers.Pricing).Methods("GET")
-			signUpRouter.HandleFunc("/pricing", handlers.PricingPost).Methods("POST")
-			signUpRouter.HandleFunc("/premium", handlers.MobilePricing).Methods("GET")
+			// signUpRouter.HandleFunc("/pricing", handlers.Pricing).Methods("GET")
+			// signUpRouter.HandleFunc("/pricing", handlers.PricingPost).Methods("POST")
+			// signUpRouter.HandleFunc("/premium", handlers.MobilePricing).Methods("GET")
 			signUpRouter.Use(csrfHandler)
 
 			oauthRouter := router.PathPrefix("/user").Subrouter()

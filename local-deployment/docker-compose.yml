@@ -33,11 +33,11 @@ services:
   frontend-data-updater:
     <<: *default-service
     command: go run ./cmd/frontend-data-updater -config /app/local-deployment/config.yml
-  # frontend:
-  #   <<: *default-service
-  #   command: go run ./cmd/explorer -config /app/local-deployment/config.yml
-  #   environment:
-  #     - FRONTEND_ENABLED=true
+  frontend:
+    <<: *default-service
+    command: go run ./cmd/explorer -config /app/local-deployment/config.yml
+    environment:
+      - FRONTEND_ENABLED=true
   ratelimits-updater:
     <<: *default-service
     command: go run ./cmd/misc -config /app/local-deployment/config.yml -command=update-ratelimits

@@ -146,9 +146,8 @@ type Config struct {
 		MaxMailsPerEmailPerDay  int           `yaml:"maxMailsPerEmailPerDay" envconfig:"FRONTEND_MAX_MAIL_PER_EMAIL_PER_DAY"`
 		Mail                    struct {
 			SendGrid struct {
-				NonReply   string `yaml:"nonreply" envconfig:"FRONTEND_MAIN_SENDGRID_NONREPLY"`
-				Reply      string `yaml:"reply" envconfig:"FRONTEND_MAIN_SENDGRID_REPLY"`
-				PrivateKey string `yaml:"apiKey" envconfig:"FRONTEND_MAIL_SENDGRID_PRIVATE_KEY"`
+				Sender string `yaml:"sender" envconfig:"FRONTEND_MAIN_SENDGRID_SENDER"`
+				ApiKey string `yaml:"apiKey" envconfig:"FRONTEND_MAIL_SENDGRID_API_KEY"`
 			} `yaml:"sendgrid"`
 			Contact struct {
 				SupportEmail string `yaml:"supportEmail" envconfig:"FRONTEND_MAIL_CONTACT_SUPPORT_EMAIL"`

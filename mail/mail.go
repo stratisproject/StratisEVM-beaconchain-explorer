@@ -26,7 +26,7 @@ func SendHTMLMail(to, subject string, msg types.Email, attachment []types.EmailA
 	var err error
 	var body bytes.Buffer
 
-	if utils.Config.Frontend.Mail.SendGrid.PrivateKey != "" {
+	if utils.Config.Frontend.Mail.SendGrid.ApiKey != "" {
 		_ = renderer.ExecuteTemplate(&body, "layout", MailTemplate{Mail: msg, Domain: utils.Config.Frontend.SiteDomain})
 		content := body.String()
 		err = SendMailViaSendGrid(to, subject, content, createTextMessage(msg), attachment)
@@ -40,7 +40,7 @@ func SendHTMLMail(to, subject string, msg types.Email, attachment []types.EmailA
 // It will use smtp if configured otherwise it will use gunmail if configured.
 func SendTextMail(to, subject, msg string, attachment []types.EmailAttachment) error {
 	var err error
-	if utils.Config.Frontend.Mail.SendGrid.PrivateKey != "" {
+	if utils.Config.Frontend.Mail.SendGrid.ApiKey != "" {
 		err = SendMailViaSendGrid(to, subject, msg, "", attachment)
 	} else {
 		err = fmt.Errorf("invalid config for mail-service")
@@ -84,10 +84,10 @@ func SendMailRateLimited(to, subject string, msg types.Email, attachment []types
 // SendMailViaSendGrid to the given address with the given message using sendgrid
 func SendMailViaSendGrid(toEmail, subject string, msgTxt string, msgHtml string, attachment []types.EmailAttachment) error {
 	var err error
-	from := mail.NewEmail(utils.Config.Frontend.SiteDomain, utils.Config.Frontend.Mail.SendGrid.NonReply)
-	to := mail.NewEmail("Reciever Email", toEmail)
+	from := mail.NewEmail(utils.Config.Frontend.SiteDomain, utils.Config.Frontend.Mail.SendGrid.Sender)
+	to := mail.NewEmail("", toEmail)
 	message := mail.NewSingleEmail(from, subject, to, msgTxt, msgHtml)
-	client := sendgrid.NewSendClient(utils.Config.Frontend.Mail.SendGrid.PrivateKey)
+	client := sendgrid.NewSendClient(utils.Config.Frontend.Mail.SendGrid.ApiKey)
 	response, err := client.Send(message)
 	fmt.Println("Success in sending mail using sendgrid. Statuscode %w", response.StatusCode)
 	return err

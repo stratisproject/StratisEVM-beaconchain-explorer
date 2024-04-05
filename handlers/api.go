@@ -37,17 +37,17 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// @title beaconcha.in Ethereum API Documentation
+// @title beacon.stratisevm.com Ethereum API Documentation
 // @version 1.1
 // @description High performance API for querying information about Ethereum
 // @description The API is currently free to use. A fair use policy applies. Calls are rate limited to
 // @description 10 requests / 1 minute / IP. All API results are cached for 1 minute.
-// @description If you required a higher usage plan please checkout https://beaconcha.in/pricing.
+// @description If you required a higher usage plan please checkout https://beacon.stratisevm.com/pricing.
 // @description The API key can be provided in the Header or as a query string parameter.
 // @description
-// @description Key as a query string parameter: `curl https://beaconcha.in/api/v1/slot/1?apikey=<your_key>`
+// @description Key as a query string parameter: `curl https://beacon.stratisevm.com/api/v1/slot/1?apikey=<your_key>`
 // @description
-// @description Key in a request header:  `curl -H 'apikey: <your_key>' https://beaconcha.in/api/v1/slot/1`
+// @description Key in a request header:  `curl -H 'apikey: <your_key>' https://beacon.stratisevm.com/api/v1/slot/1`
 // @tag.name Epoch
 // @tag.description Consensus layer information about epochs
 // @tag.docs.url https://example.com
@@ -70,8 +70,8 @@ import (
 // @tag.name User
 // @tag.description provided for Oauth applications (public OAuth support is a work in progress).
 // @securitydefinitions.oauth2.accessCode OAuthAccessCode
-// @tokenurl https://beaconcha.in/user/token
-// @authorizationurl https://beaconcha.in/user/authorize
+// @tokenurl https://beacon.stratisevm.com/user/token
+// @authorizationurl https://beacon.stratisevm.com/user/authorize
 // @securitydefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
@@ -2812,7 +2812,7 @@ func ApiGraffitiwall(w http.ResponseWriter, r *http.Request) {
 }
 
 // ApiChart godoc
-// @Summary Returns charts from the page https://beaconcha.in/charts as PNG
+// @Summary Returns charts from the page https://beacon.stratisevm.com/charts as PNG
 // @Tags Misc
 // @Produce  json
 // @Param  chart path string true "Chart name (see https://github.com/gobitfly/eth2-beaconchain-explorer/blob/master/services/charts_updater.go#L20 for all available names)"
@@ -3569,10 +3569,10 @@ func ClientStats(w http.ResponseWriter, r *http.Request) {
 }
 
 // ClientStatsPost godoc
-// @Summary Used in eth2 clients to submit stats to your beaconcha.in account. This data can be accessed by the app or the user stats api call.
+// @Summary Used in eth2 clients to submit stats to your beacon.stratisevm.com account. This data can be accessed by the app or the user stats api call.
 // @Tags User
 // @Produce json
-// @Param apikey query string true "User API key, can be found on https://beaconcha.in/user/settings"
+// @Param apikey query string true "User API key, can be found on https://beacon.stratisevm.com/user/settings"
 // @Param machine query string false "Name your device if you have multiple devices you want to monitor"
 // @Success 200 {object} types.ApiResponse
 // @Failure 400 {object} types.ApiResponse

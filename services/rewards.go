@@ -154,7 +154,7 @@ func GeneratePdfReport(hist rewardHistory, currency string) []byte {
 		pdf.SetY(5)
 		pdf.SetFont("Arial", "B", 12)
 		pdf.Cell(80, 0, "")
-		pdf.CellFormat(30, 10, fmt.Sprintf("Beaconcha.in Income History (%s - %s)", data[len(data)-1][0], data[0][0]), "", 0, "C", false, 0, "")
+		pdf.CellFormat(30, 10, fmt.Sprintf("beacon.stratisevm.com Income History (%s - %s)", data[len(data)-1][0], data[0][0]), "", 0, "C", false, 0, "")
 		// pdf.Ln(-1)
 	}, true)
 

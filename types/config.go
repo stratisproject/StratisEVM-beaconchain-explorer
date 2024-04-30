@@ -17,6 +17,7 @@ type Config struct {
 		Port         string `yaml:"port" envconfig:"READER_DB_PORT"`
 		MaxOpenConns int    `yaml:"maxOpenConns" envconfig:"READER_DB_MAX_OPEN_CONNS"`
 		MaxIdleConns int    `yaml:"maxIdleConns" envconfig:"READER_DB_MAX_IDLE_CONNS"`
+		SSLMode      string `yaml:"sslMode" envconfig:"READER_SSL_MODE"`
 	} `yaml:"readerDatabase"`
 	WriterDatabase struct {
 		Username     string `yaml:"user" envconfig:"WRITER_DB_USERNAME"`
@@ -26,6 +27,7 @@ type Config struct {
 		Port         string `yaml:"port" envconfig:"WRITER_DB_PORT"`
 		MaxOpenConns int    `yaml:"maxOpenConns" envconfig:"WRITER_DB_MAX_OPEN_CONNS"`
 		MaxIdleConns int    `yaml:"maxIdleConns" envconfig:"WRITER_DB_MAX_IDLE_CONNS"`
+		SSLMode      string `yaml:"sslMode" envconfig:"WRITER_SSL_MODE"`
 	} `yaml:"writerDatabase"`
 	Bigtable struct {
 		Project             string `yaml:"project" envconfig:"BIGTABLE_PROJECT"`
@@ -117,6 +119,7 @@ type Config struct {
 			Port         string `yaml:"port" envconfig:"FRONTEND_READER_DB_PORT"`
 			MaxOpenConns int    `yaml:"maxOpenConns" envconfig:"FRONTEND_READER_DB_MAX_OPEN_CONNS"`
 			MaxIdleConns int    `yaml:"maxIdleConns" envconfig:"FRONTEND_READER_DB_MAX_IDLE_CONNS"`
+			SSLMode      string `yaml:"sslMode" envconfig:"FRONTEND_READER_SSL_MODE"`
 		} `yaml:"readerDatabase"`
 		WriterDatabase struct {
 			Username     string `yaml:"user" envconfig:"FRONTEND_WRITER_DB_USERNAME"`
@@ -126,6 +129,7 @@ type Config struct {
 			Port         string `yaml:"port" envconfig:"FRONTEND_WRITER_DB_PORT"`
 			MaxOpenConns int    `yaml:"maxOpenConns" envconfig:"FRONTEND_WRITER_DB_MAX_OPEN_CONNS"`
 			MaxIdleConns int    `yaml:"maxIdleConns" envconfig:"FRONTEND_WRITER_DB_MAX_IDLE_CONNS"`
+			SSLMode      string `yaml:"sslMode" envconfig:"FRONTEND_WRITER_SSL_MODE"`
 		} `yaml:"writerDatabase"`
 		Stripe struct {
 			SecretKey string `yaml:"secretKey" envconfig:"FRONTEND_STRIPE_SECRET_KEY"`
@@ -241,6 +245,7 @@ type DatabaseConfig struct {
 	Port         string
 	MaxOpenConns int
 	MaxIdleConns int
+	SSLMode      string
 }
 
 type ServiceMonitoringConfiguration struct {

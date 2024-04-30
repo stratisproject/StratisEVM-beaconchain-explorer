@@ -93,8 +93,13 @@ func mustInitDB(writer *types.DatabaseConfig, reader *types.DatabaseConfig) (*sq
 		reader.MaxIdleConns = reader.MaxOpenConns
 	}
 
+	writerSSLMode := "disable"
+	if writer.SSLMode != "" {
+		writerSSLMode = writer.SSLMode
+	}
+
 	logger.Infof("initializing writer db connection to %v with %v/%v conn limit", writer.Host, writer.MaxIdleConns, writer.MaxOpenConns)
-	dbConnWriter, err := sqlx.Open("pgx", fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", writer.Username, url.QueryEscape(writer.Password), writer.Host, writer.Port, writer.Name, writer.SSLMode))
+	dbConnWriter, err := sqlx.Open("pgx", fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", writer.Username, url.QueryEscape(writer.Password), writer.Host, writer.Port, writer.Name, writerSSLMode))
 	if err != nil {
 		utils.LogFatal(err, "error getting Connection Writer database", 0)
 	}
@@ -109,8 +114,13 @@ func mustInitDB(writer *types.DatabaseConfig, reader *types.DatabaseConfig) (*sq
 		return dbConnWriter, dbConnWriter
 	}
 
+	readerSSLMode := "disable"
+	if reader.SSLMode != "" {
+		readerSSLMode = reader.SSLMode
+	}
+
 	logger.Infof("initializing reader db connection to %v with %v/%v conn limit", writer.Host, reader.MaxIdleConns, reader.MaxOpenConns)
-	dbConnReader, err := sqlx.Open("pgx", fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", reader.Username, url.QueryEscape(reader.Password), reader.Host, reader.Port, reader.Name, reader.SSLMode))
+	dbConnReader, err := sqlx.Open("pgx", fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", reader.Username, url.QueryEscape(reader.Password), reader.Host, reader.Port, reader.Name, readerSSLMode))
 	if err != nil {
 		utils.LogFatal(err, "error getting Connection Reader database", 0)
 	}

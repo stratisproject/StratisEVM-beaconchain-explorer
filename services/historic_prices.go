@@ -107,7 +107,7 @@ func fetchHistoricPrice(ts time.Time) (*types.HistoricEthPrice, error) {
 	logger.Infof("fetching historic prices for day %v", ts)
 	client := &http.Client{Timeout: time.Second * 10}
 
-	chain := "ethereum"
+	chain := "stratis"
 
 	if utils.Config.Chain.Name == "gnosis" {
 		chain = "gnosis"

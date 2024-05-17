@@ -4243,7 +4243,7 @@ func (bigtable *Bigtable) SaveERC20TokenPrices(prices []*types.ERC20TokenPrice) 
 }
 
 func (bigtable *Bigtable) SaveBlockKeys(blockNumber uint64, blockHash []byte, keys string) error {
-	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Second*30))
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(time.Minute*5))
 	defer cancel()
 
 	mut := gcp_bigtable.NewMutation()

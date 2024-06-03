@@ -92,6 +92,8 @@ github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0
 github.com/Microsoft/go-winio v0.6.1 h1:9/kr64B9VUZrLm5YYwbGtUJnMgqWVOdUAXu6Migciow=
 github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5+sAH+4kjUM=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
+github.com/SergeevDmitry/eth-rewards v0.1.2-0.20240603134710-02e0dcb0ebc0 h1:SdZoJrBsp9s+Kq/cb1ziLM2kM8CCQnU+9fXLTjrR0vw=
+github.com/SergeevDmitry/eth-rewards v0.1.2-0.20240603134710-02e0dcb0ebc0/go.mod h1:U/2G2qYOTfP3T7x4H9IwIlk7Fvl8Zja4KBXkpngZ194=
 github.com/SergeevDmitry/eth.store v0.0.0-20240207181457-302d43d1f4b0 h1:LXGXwkv8wVNHV7w8zNtz4gbruCjnx6X1l29xPQFOjDI=
 github.com/SergeevDmitry/eth.store v0.0.0-20240207181457-302d43d1f4b0/go.mod h1:n/jFGHLcgE6xijvG1Rq72BnWhzZY7C1oJOcYzsKqebo=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
@@ -479,8 +481,6 @@ github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG
 github.com/go-sql-driver/mysql v1.7.0 h1:ueSltNNllEqE3qcWBTD0iQd3IpL/6U+mJxLkazJ7YPc=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0/go.mod h1:fyg7847qk6SyHyPtNmDHnmrv/HOrqktSC+C9fM+CJOE=
-github.com/gobitfly/eth-rewards v0.1.2-0.20230403064929-411ddc40a5f7 h1:qAEBlj4j25sJjsj5CQraL94rY9jyPIjCZ+hlu84n5l0=
-github.com/gobitfly/eth-rewards v0.1.2-0.20230403064929-411ddc40a5f7/go.mod h1:JrFv2uq5i+p6yEoRSHralEV139HkPV0wBjZZHWb4he8=
 github.com/gobitfly/prysm/v3 v3.0.0-20230216184552-2f3f1e8190d5 h1:8kVoXCPhDwSjaGlKzBVQeE8n49k6jZumBGiP26FHNy0=
 github.com/gobitfly/prysm/v3 v3.0.0-20230216184552-2f3f1e8190d5/go.mod h1:+v+em7rOykPs93APGWCX/95/3uxU8bSVmbZ4+YNJzdA=
 github.com/gobitfly/rocketpool-go v0.0.0-20240105082836-5bb7c83a2d08 h1:I13XIFeS55BwDegvWFJm3Vc14a1pN7m6Q0L+grbKp50=

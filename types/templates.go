@@ -11,10 +11,10 @@ import (
 	"strconv"
 	"time"
 
+	itypes "github.com/SergeevDmitry/eth-rewards/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	geth_types "github.com/ethereum/go-ethereum/core/types"
-	itypes "github.com/gobitfly/eth-rewards/types"
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"

@@ -15,8 +15,8 @@ import (
 	"time"
 
 	gcp_bigtable "cloud.google.com/go/bigtable"
+	itypes "github.com/SergeevDmitry/eth-rewards/types"
 	"github.com/go-redis/redis/v8"
-	itypes "github.com/gobitfly/eth-rewards/types"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/api/option"

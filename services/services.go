@@ -19,7 +19,7 @@ import (
 	"sync"
 	"time"
 
-	itypes "github.com/gobitfly/eth-rewards/types"
+	itypes "github.com/SergeevDmitry/eth-rewards/types"
 	"github.com/shopspring/decimal"
 
 	"github.com/ethereum/go-ethereum/common"

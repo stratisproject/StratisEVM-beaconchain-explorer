@@ -27,7 +27,7 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 
-	itypes "github.com/gobitfly/eth-rewards/types"
+	itypes "github.com/SergeevDmitry/eth-rewards/types"
 )
 
 const CalculatingHint = `Calculating…`

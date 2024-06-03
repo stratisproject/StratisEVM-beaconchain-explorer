@@ -12,8 +12,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	eth_rewards "github.com/gobitfly/eth-rewards"
-	"github.com/gobitfly/eth-rewards/beacon"
+	eth_rewards "github.com/SergeevDmitry/eth-rewards"
+	"github.com/SergeevDmitry/eth-rewards/beacon"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"

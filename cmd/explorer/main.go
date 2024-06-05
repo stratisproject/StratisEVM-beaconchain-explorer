@@ -59,12 +59,26 @@ func init() {
 func main() {
 	configPath := flag.String("config", "", "Path to the config file, if empty string defaults will be used")
 	versionFlag := flag.Bool("version", false, "Show version and exit")
+	verbosityFlag := flag.String("verbosity", "info", "Logging level: info, warn, error, debug, trace")
 	flag.Parse()
 
 	if *versionFlag {
 		fmt.Println(version.Version)
 		fmt.Println(version.GoVersion)
 		return
+	}
+
+	switch *verbosityFlag {
+	case "warn":
+		logrus.SetLevel(logrus.WarnLevel)
+	case "error":
+		logrus.SetLevel(logrus.ErrorLevel)
+	case "debug":
+		logrus.SetLevel(logrus.DebugLevel)
+	case "trace":
+		logrus.SetLevel(logrus.TraceLevel)
+	default:
+		logrus.SetLevel(logrus.InfoLevel)
 	}
 
 	cfg := &types.Config{}

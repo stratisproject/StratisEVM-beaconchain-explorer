@@ -25,13 +25,13 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 		return fmt.Errorf("error retrieving chain head: %w", err)
 	}
 
-	tx, err := db.WriterDb.Beginx()
-	if err != nil {
-		return fmt.Errorf("error starting tx: %w", err)
-	}
-	defer tx.Rollback()
-
 	if firstRun {
+		tx, err := db.WriterDb.Beginx()
+		if err != nil {
+			return fmt.Errorf("error starting tx: %w", err)
+		}
+		defer tx.Rollback()
+
 		// get all slots we currently have in the database
 		dbSlots, err := db.GetAllSlots(tx)
 		if err != nil {
@@ -70,27 +70,49 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 				}
 			}
 		}
+
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("error committing tx: %w", err)
+		}
 	}
 
 	// at this point we know that we have a coherent list of slots in the database without any gaps
 	lastDbSlot := uint64(0)
-	err = tx.Get(&lastDbSlot, "SELECT slot FROM blocks ORDER BY slot DESC limit 1")
+	{
+		tx, err := db.WriterDb.Beginx()
+		if err != nil {
+			return fmt.Errorf("error starting tx: %w", err)
+		}
+		defer tx.Rollback()
 
-	if err != nil {
-		if err == sql.ErrNoRows {
-			logger.Infof("db is empty, export genesis slot")
-			err := ExportSlot(client, 0, utils.EpochOfSlot(0) == head.HeadEpoch, tx)
-			if err != nil {
-				return fmt.Errorf("error exporting slot %v: %w", 0, err)
+		err = tx.Get(&lastDbSlot, "SELECT slot FROM blocks ORDER BY slot DESC limit 1")
+
+		if err != nil {
+			if err == sql.ErrNoRows {
+				logger.Infof("db is empty, export genesis slot")
+				err := ExportSlot(client, 0, utils.EpochOfSlot(0) == head.HeadEpoch, tx)
+				if err != nil {
+					return fmt.Errorf("error exporting slot %v: %w", 0, err)
+				}
+				lastDbSlot = 0
+			} else {
+				return fmt.Errorf("error retrieving last slot from the db: %w", err)
 			}
-			lastDbSlot = 0
-		} else {
-			return fmt.Errorf("error retrieving last slot from the db: %w", err)
+		}
+
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("error committing tx: %w", err)
 		}
 	}
 
 	// check if any new slots have been added to the chain
 	if lastDbSlot != head.HeadSlot {
+		tx, err := db.WriterDb.Beginx()
+		if err != nil {
+			return fmt.Errorf("error starting tx: %w", err)
+		}
+		defer tx.Rollback()
+
 		slotsExported := 0
 		for slot := lastDbSlot + 1; slot <= head.HeadSlot; slot++ { // export any new slots
 			err := ExportSlot(client, slot, utils.EpochOfSlot(slot) == head.HeadEpoch, tx)
@@ -110,6 +132,10 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 				return nil
 			}
 		}
+
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("error committing tx: %w", err)
+		}
 	}
 
 	// at this point we have all all data up to the current chain head in the database
@@ -121,10 +147,15 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 	}
 	for _, dbSlot := range dbNonFinalSlots {
 		header, err := client.GetBlockHeader(dbSlot.Slot)
-
 		if err != nil {
 			return fmt.Errorf("error retrieving block root for slot %v: %w", dbSlot.Slot, err)
 		}
+
+		tx, err := db.WriterDb.Beginx()
+		if err != nil {
+			return fmt.Errorf("error starting tx: %w", err)
+		}
+		defer tx.Rollback()
 
 		nodeSlotFinalized := dbSlot.Slot <= head.FinalizedSlot
 
@@ -200,11 +231,11 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 				}
 			}
 		}
-	}
 
-	err = tx.Commit()
-	if err != nil {
-		return fmt.Errorf("error committing tx: %w", err)
+		err = tx.Commit()
+		if err != nil {
+			return fmt.Errorf("error committing tx: %w", err)
+		}
 	}
 
 	return nil

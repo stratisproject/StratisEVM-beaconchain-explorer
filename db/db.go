@@ -1452,15 +1452,18 @@ func saveBlocks(blocks map[uint64]map[string]*types.Block, tx *sqlx.Tx, forceSlo
 			blockLog.WithField("duration", time.Since(t)).Tracef("stmtBlock")
 			logger.Tracef("done, took %v", time.Since(t))
 
-			t = time.Now()
-			logger.Tracef("writing BlobKZGCommitments data")
-			for i, c := range b.BlobKZGCommitments {
-				_, err := stmtBlobs.Exec(b.Slot, b.BlockRoot, i, c, b.BlobKZGProofs[i], utils.VersionedBlobHash(c).Bytes())
-				if err != nil {
-					return fmt.Errorf("error executing stmtBlobs for block at slot %v index %v: %w", b.Slot, i, err)
+			if len(b.BlobKZGProofs) == len(b.BlobKZGCommitments) {
+				t = time.Now()
+				logger.Tracef("writing BlobKZGCommitments data")
+				for i, c := range b.BlobKZGCommitments {
+					_, err := stmtBlobs.Exec(b.Slot, b.BlockRoot, i, c, b.BlobKZGProofs[i], utils.VersionedBlobHash(c).Bytes())
+					if err != nil {
+						return fmt.Errorf("error executing stmtBlobs for block at slot %v index %v: %w", b.Slot, i, err)
+					}
 				}
+				logger.Tracef("done, took %v", time.Since(t))
 			}
-			logger.Tracef("done, took %v", time.Since(t))
+
 			t = time.Now()
 			logger.Tracef("writing transactions and withdrawal data")
 			if payload := b.ExecutionPayload; payload != nil {

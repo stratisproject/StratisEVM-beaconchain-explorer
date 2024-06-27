@@ -916,7 +916,7 @@ func (lc *PrysmClient) blockFromResponse(parsedHeaders *StandardBeaconHeaderResp
 		if err != nil {
 			return nil, err
 		}
-		if len(res.Data) != len(parsedBlock.Message.Body.BlobKZGCommitments) {
+		if len(res.Data) > 0 && len(res.Data) != len(parsedBlock.Message.Body.BlobKZGCommitments) {
 			return nil, fmt.Errorf("error constructing block at slot %v: len(blob_sidecars) != len(block.blob_kzg_commitments): %v != %v", block.Slot, len(res.Data), len(parsedBlock.Message.Body.BlobKZGCommitments))
 		}
 		for i, d := range res.Data {

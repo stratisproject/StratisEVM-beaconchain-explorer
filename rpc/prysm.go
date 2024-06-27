@@ -907,23 +907,26 @@ func (lc *PrysmClient) blockFromResponse(parsedHeaders *StandardBeaconHeaderResp
 		SyncDuties:                 make(map[types.ValidatorIndex]bool),
 	}
 
-	for i, c := range parsedBlock.Message.Body.BlobKZGCommitments {
-		block.BlobKZGCommitments[i] = c
+	res, err := lc.GetBlobSidecars(fmt.Sprintf("%#x", block.BlockRoot))
+	if err != nil {
+		return nil, err
 	}
 
-	if len(parsedBlock.Message.Body.BlobKZGCommitments) > 0 {
-		res, err := lc.GetBlobSidecars(fmt.Sprintf("%#x", block.BlockRoot))
-		if err != nil {
-			return nil, err
+	if len(res.Data) > 0 {
+		for i, c := range parsedBlock.Message.Body.BlobKZGCommitments {
+			block.BlobKZGCommitments[i] = c
 		}
-		if len(res.Data) > 0 && len(res.Data) != len(parsedBlock.Message.Body.BlobKZGCommitments) {
-			return nil, fmt.Errorf("error constructing block at slot %v: len(blob_sidecars) != len(block.blob_kzg_commitments): %v != %v", block.Slot, len(res.Data), len(parsedBlock.Message.Body.BlobKZGCommitments))
-		}
-		for i, d := range res.Data {
-			if !bytes.Equal(d.KzgCommitment, block.BlobKZGCommitments[i]) {
-				return nil, fmt.Errorf("error constructing block at slot %v: unequal kzg_commitments at index %v: %#x != %#x", block.Slot, i, d.KzgCommitment, block.BlobKZGCommitments[i])
+
+		if len(parsedBlock.Message.Body.BlobKZGCommitments) > 0 {
+			if len(res.Data) != len(parsedBlock.Message.Body.BlobKZGCommitments) {
+				return nil, fmt.Errorf("error constructing block at slot %v: len(blob_sidecars) != len(block.blob_kzg_commitments): %v != %v", block.Slot, len(res.Data), len(parsedBlock.Message.Body.BlobKZGCommitments))
 			}
-			block.BlobKZGProofs[i] = d.KzgProof
+			for i, d := range res.Data {
+				if !bytes.Equal(d.KzgCommitment, block.BlobKZGCommitments[i]) {
+					return nil, fmt.Errorf("error constructing block at slot %v: unequal kzg_commitments at index %v: %#x != %#x", block.Slot, i, d.KzgCommitment, block.BlobKZGCommitments[i])
+				}
+				block.BlobKZGProofs[i] = d.KzgProof
+			}
 		}
 	}
 

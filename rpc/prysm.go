@@ -928,6 +928,8 @@ func (lc *PrysmClient) blockFromResponse(parsedHeaders *StandardBeaconHeaderResp
 				block.BlobKZGProofs[i] = d.KzgProof
 			}
 		}
+	} else {
+		block.BlobKZGProofs = make([][]byte, 0)
 	}
 
 	epochAssignments, err := lc.GetEpochAssignments(slot / utils.Config.Chain.ClConfig.SlotsPerEpoch)

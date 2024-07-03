@@ -122,7 +122,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 			slotsExported++
 
 			// in case of large export runs, export at most 10 epochs per tx
-			if slotsExported == int(utils.Config.Chain.ClConfig.SlotsPerEpoch) {
+			if slotsExported == int(utils.Config.Chain.ClConfig.SlotsPerEpoch)*10 {
 				err := tx.Commit()
 
 				if err != nil {

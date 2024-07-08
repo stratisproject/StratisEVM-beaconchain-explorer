@@ -28,8 +28,8 @@ var pricesMu = &sync.Mutex{}
 var didInit = uint64(0)
 var feeds = map[string]*chainlink_feed.Feed{}
 var calcPairs = map[string]bool{}
-var clCurrency = "ETH"
-var elCurrency = "ETH"
+var clCurrency = "STRAX"
+var elCurrency = "STRAX"
 
 var currencies = map[string]struct {
 	Symbol string
@@ -48,8 +48,8 @@ var currencies = map[string]struct {
 	"JPY":    {"¥", "Japanese Yen"},
 	"RUB":    {"₽", "Russian Ruble"},
 	"USD":    {"$", "United States Dollar"},
-	"STRAX":  {"STRAX", "Strat"},
-	"tSTRAX": {"tSTRAX", "Test Strat"},
+	"STRAX":  {"STRAX", "Stratis"},
+	"tSTRAX": {"tSTRAX", "Test Stratis"},
 }
 
 func init() {

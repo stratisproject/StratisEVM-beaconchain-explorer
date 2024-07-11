@@ -1178,15 +1178,15 @@ func GetRates(selectedCurrency string) *types.Rates {
 	r.ElCurrencyPrice = price.GetStratisPrice(r.SelectedCurrency)
 	r.MainCurrencyTickerPrice = price.GetStratisPrice(r.TickerCurrency)
 
-	r.MainCurrencyPriceFormatted = utils.FormatAddCommas(uint64(r.MainCurrencyPrice))
-	r.ClCurrencyPriceFormatted = utils.FormatAddCommas(uint64(r.ClCurrencyPrice))
-	r.ElCurrencyPriceFormatted = utils.FormatAddCommas(uint64(r.ElCurrencyPrice))
-	r.MainCurrencyTickerPriceFormatted = utils.FormatAddCommas(uint64(r.MainCurrencyTickerPrice))
+	r.MainCurrencyPriceFormatted = utils.FormatAddCommasFloat(r.MainCurrencyPrice)
+	r.ClCurrencyPriceFormatted = utils.FormatAddCommasFloat(r.ClCurrencyPrice)
+	r.ElCurrencyPriceFormatted = utils.FormatAddCommasFloat(r.ElCurrencyPrice)
+	r.MainCurrencyTickerPriceFormatted = utils.FormatAddCommasFloat(r.MainCurrencyTickerPrice)
 
-	r.MainCurrencyPriceKFormatted = utils.KFormatterEthPrice(uint64(r.MainCurrencyPrice))
-	r.ClCurrencyPriceKFormatted = utils.KFormatterEthPrice(uint64(r.ClCurrencyPrice))
-	r.ElCurrencyPriceKFormatted = utils.KFormatterEthPrice(uint64(r.ElCurrencyPrice))
-	r.MainCurrencyTickerPriceKFormatted = utils.FormatAddCommas(uint64(r.MainCurrencyTickerPrice))
+	r.MainCurrencyPriceKFormatted = utils.KFormatterEthPriceFloat(r.MainCurrencyPrice)
+	r.ClCurrencyPriceKFormatted = utils.KFormatterEthPriceFloat(r.ClCurrencyPrice)
+	r.ElCurrencyPriceKFormatted = utils.KFormatterEthPriceFloat(r.ElCurrencyPrice)
+	r.MainCurrencyTickerPriceKFormatted = utils.FormatAddCommasFloat(r.MainCurrencyTickerPrice)
 
 	r.MainCurrencyPrices = map[string]types.RatesPrice{}
 	for _, c := range price.GetAvailableCurrencies() {
@@ -1194,7 +1194,7 @@ func GetRates(selectedCurrency string) *types.Rates {
 		p.Symbol = price.GetCurrencySymbol(c)
 		cPrice := price.GetStratisPrice(c)
 		p.RoundPrice = uint64(cPrice)
-		p.TruncPrice = utils.KFormatterEthPrice(uint64(cPrice))
+		p.TruncPrice = utils.KFormatterEthPriceFloat(cPrice)
 		r.MainCurrencyPrices[c] = p
 	}
 

@@ -443,6 +443,13 @@ func FormatAddCommas(n uint64) template.HTML {
 	return template.HTML(number)
 }
 
+func FormatAddCommasFloat(n float64) template.HTML {
+	number := FormatFloat(n, 2)
+
+	number = strings.ReplaceAll(number, ",", `<span class="thousands-separator"></span>`)
+	return template.HTML(number)
+}
+
 // FormatBlockRoot will return the block-root formated as html
 func FormatBlockRoot(blockRoot []byte) template.HTML {
 	copyBtn := CopyButton(hex.EncodeToString(blockRoot))
@@ -1217,6 +1224,14 @@ func KFormatterEthPrice(price uint64) template.HTML {
 		return template.HTML(ethTruncPrice)
 	}
 	return template.HTML(fmt.Sprint(price))
+}
+
+func KFormatterEthPriceFloat(price float64) template.HTML {
+	if price > 999 {
+		ethTruncPrice := fmt.Sprintf("%.2f", float64(int((price/float64(1000))*10))/float64(10)) + "k"
+		return template.HTML(ethTruncPrice)
+	}
+	return template.HTML(fmt.Sprintf("%.2f", price))
 }
 
 func FormatRPL(num string) string {

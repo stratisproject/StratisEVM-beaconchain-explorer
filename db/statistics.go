@@ -1101,7 +1101,9 @@ func gatherValidatorMissedAttestationsStatisticsForDay(validators []uint64, day 
 			completedEpochData := epochParticipation[completedEpoch]
 
 			if completedEpochData == nil {
-				return fmt.Errorf("logic error, did not retrieve data for epoch %v", completedEpoch)
+				logger.Warnf("logic error, did not retrieve data for epoch %v", completedEpoch)
+				continue
+				// return fmt.Errorf("logic error, did not retrieve data for epoch %v", completedEpoch)
 			}
 
 			mux.Lock()

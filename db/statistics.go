@@ -900,6 +900,9 @@ func gatherValidatorDepositWithdrawals(day uint64, data []*types.ValidatorStatsT
 
 	mux.Lock()
 	for _, r := range resWithdrawals {
+		if int(r.ValidatorIndex) > len(data)-1 {
+			continue
+		}
 		data[r.ValidatorIndex].Withdrawals = int64(r.Withdrawals)
 		data[r.ValidatorIndex].WithdrawalsAmount = int64(r.WithdrawalsAmount)
 	}

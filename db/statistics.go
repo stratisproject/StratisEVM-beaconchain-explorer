@@ -802,6 +802,10 @@ func gatherValidatorBalances(client rpc.Client, day uint64, data []*types.Valida
 
 	mux.Lock()
 	for _, stat := range firstEpochBalances.Data {
+		// Edge case when last validators has 0 balance at the end of the day
+		if int(stat.Index) > len(data) {
+			continue
+		}
 		data[stat.Index].StartBalance = int64(stat.Balance)
 		data[stat.Index].StartEffectiveBalance = int64(stat.Validator.EffectiveBalance)
 	}

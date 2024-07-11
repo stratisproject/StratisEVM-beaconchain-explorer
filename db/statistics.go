@@ -810,6 +810,10 @@ func gatherValidatorBalances(client rpc.Client, day uint64, data []*types.Valida
 		data[stat.Index].StartEffectiveBalance = int64(stat.Validator.EffectiveBalance)
 	}
 	for _, stat := range lastEpochBalances.Data {
+		// Edge case when last validators has 0 balance at the end of the day
+		if int(stat.Index) > len(data)-1 {
+			continue
+		}
 		data[stat.Index].EndBalance = int64(stat.Balance)
 		data[stat.Index].EndEffectiveBalance = int64(stat.Validator.EffectiveBalance)
 	}

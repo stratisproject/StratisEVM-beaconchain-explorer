@@ -656,6 +656,9 @@ func gatherValidatorBlockStats(day uint64, data []*types.ValidatorStatsTableDbRo
 
 	mux.Lock()
 	for _, r := range resBlocks {
+		if int(r.ValidatorIndex) > len(data)-1 {
+			continue
+		}
 		data[r.ValidatorIndex].ProposedBlocks = int64(r.ProposedBlocks)
 		data[r.ValidatorIndex].MissedBlocks = int64(r.MissedBlocks)
 		data[r.ValidatorIndex].OrphanedBlocks = int64(r.OrphanedBlocks)
@@ -683,6 +686,9 @@ func gatherValidatorBlockStats(day uint64, data []*types.ValidatorStatsTableDbRo
 
 	mux.Lock()
 	for _, r := range resSlashings {
+		if int(r.ValidatorIndex) > len(data)-1 {
+			continue
+		}
 		data[r.ValidatorIndex].AttesterSlashings = int64(r.AttesterSlashings)
 		data[r.ValidatorIndex].ProposerSlashing = int64(r.ProposerSlashing)
 	}
@@ -766,6 +772,9 @@ func gatherValidatorElIcome(day uint64, data []*types.ValidatorStatsTableDbRow, 
 
 	mux.Lock()
 	for proposer, r := range proposerRewards {
+		if int(proposer) > len(data)-1 {
+			continue
+		}
 		data[proposer].ElRewardsWei = decimal.NewFromBigInt(r.TxFeeReward, 0)
 		data[proposer].MEVRewardsWei = decimal.NewFromBigInt(r.MevReward, 0)
 	}
@@ -977,6 +986,11 @@ func GatherValidatorSyncDutiesForDay(validators []uint64, day uint64, data []*ty
 
 			validator := committee[types.CommitteeIndex(i)]
 
+			// Edge case when last validators has 0 balance at the end of the day
+			if int(validator) > len(data)-1 {
+				continue
+			}
+
 			if len(bits) == 0 { // slot is empty
 				data[validator].MissedSync++
 			} else {
@@ -1089,6 +1103,9 @@ func gatherValidatorMissedAttestationsStatisticsForDay(validators []uint64, day 
 
 			mux.Lock()
 			for validator, participated := range completedEpochData {
+				if int(validator) > len(data)-1 {
+					continue
+				}
 				if !participated {
 					data[validator].MissedAttestations++
 				}
@@ -1106,6 +1123,9 @@ func gatherValidatorMissedAttestationsStatisticsForDay(validators []uint64, day 
 		}
 		mux.Lock()
 		for validator, participated := range participation {
+			if int(validator) > len(data)-1 {
+				continue
+			}
 			if !participated {
 				data[validator].MissedAttestations++
 			}

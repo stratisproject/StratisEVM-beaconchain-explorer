@@ -109,7 +109,7 @@ function create_typeahead(input_container) {
       source: bhEth1Addresses,
       display: "address",
       templates: {
-        header: "<h3>Validators by ETH Addresses</h3>",
+        header: "<h3>Validators by STRAX Addresses</h3>",
         suggestion: function (data) {
           var len = data.validator_indices.length > VALLIMIT ? VALLIMIT + "+" : data.validator_indices.length
           return `<div class="text-monospace high-contrast" style="display:flex"><div class="text-truncate" style="flex:1 1 auto;">${data.eth1_address}</div><div style="max-width:fit-content;white-space:nowrap;">${len}</div></div>`
@@ -216,7 +216,7 @@ function showTable(data) {
       $("#form-div").removeClass("d-flex").addClass("d-none")
       $("#table-div").removeClass("d-none")
       $("#subscriptions-div").addClass("d-none")
-      $("#total-income-eth-span").html("ETH " + data.total_eth)
+      $("#total-income-eth-span").html("STRAX " + data.total_strax)
       $("#total-income-currency-span").html(data.total_currency)
       $("#totals-div").removeClass("d-none")
       $(".dt-button").addClass("ml-2 ")

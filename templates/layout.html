@@ -111,7 +111,7 @@
               </div>
             </div>
             {{ if .Mainnet }}
-              <!-- <div data-toggle="tooltip" title="" data-original-title="Price: 1 {{ .Rates.MainCurrencySymbol }} = {{ .Rates.MainCurrencyTickerPriceKFormatted }} {{ .Rates.TickerCurrencySymbol }}" id="banner-eth-price">
+              <div data-toggle="tooltip" title="" data-original-title="Price: 1 {{ .Rates.MainCurrencySymbol }} = {{ .Rates.MainCurrencyTickerPriceKFormatted }} {{ .Rates.TickerCurrencySymbol }}" id="banner-eth-price">
                 <div class="info-item d-flex mr-2 mr-lg-3">
                   <div class="info-item-header mr-1">
                     <span class="item-icon"><i class="fas fa-cubes"></i></span>
@@ -125,7 +125,7 @@
                     </a>
                   </div>
                 </div>
-              </div> -->
+              </div>
             {{ else }}
               {{- if .GasNow }}
                 <div data-toggle="tooltip" title="" data-original-title="Gas Price" class="d-none d-lg-block">
@@ -169,7 +169,7 @@
             </div>
           </div>
           <div class="info-banner-right">
-            <!-- {{ if .Mainnet }}
+            {{ if .Mainnet }}
               <div class="dropdown">
                 <a class="btn btn-transparent btn-sm dropdown-toggle currency-dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <div id="currencyFlagDropdown">
@@ -187,7 +187,7 @@
                   {{ end }}
                 </div>
               </div>
-            {{ end }} -->
+            {{ end }}
             {{ if .User.Authenticated }}
               <div class="dropdown">
                 <a class="btn btn-transparent btn-sm dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -102,8 +102,8 @@
 			progress: 0,
 			gasUsed: [
 				{
-					"title": "ETH",
-					"icon": "/img/defi/ethereum.png",
+					"title": "STRAX",
+					"icon": "/img/defi/stratis.png",
 					"tag": [
 						"Native"
 					],
@@ -355,12 +355,12 @@
 							"url": "https://beacon.stratisevm.com/tx/0x7aedc53924727ecfcf14b448777890c7d93966b646f396aa258eb8ce5b3a201b"
 						},
 						{
-							"name": "Deposit ETH",
+							"name": "Deposit STRAX",
 							"gas": 160537,
 							"url": "https://beacon.stratisevm.com/tx/0xe3e82e90763cff73132ff68cb77361d0514cc2ad55a290a2ed13816395241071"
 						},
 						{
-							"name": "Withdraw ETH",
+							"name": "Withdraw STRAX",
 							"gas": 138300,
 							"url": "https://beacon.stratisevm.com/tx/0x550902ce5e3dd7fc07c637cee68a1c82cacbec61df90b3a8f71c7ac34e457437"
 						}
@@ -394,12 +394,12 @@
 							"url": "https://beacon.stratisevm.com/tx/0x5c1818db2b9d992d2b79c729f0aed66329a6ee02fa62f32c03e3220e035a2501"
 						},
 						{
-							"name": "Deposit ETH",
+							"name": "Deposit STRAX",
 							"gas": 190595,
 							"url": "https://beacon.stratisevm.com/tx/0xea4afe0faecada55fdf9f73e9aad7e91e8ba5af7a6d9c25a9c0ea5403b9ab870"
 						},
 						{
-							"name": "Withdraw ETH",
+							"name": "Withdraw STRAX",
 							"gas": 251833,
 							"url": "https://beacon.stratisevm.com/tx/0x67fec4b263c6c3755dd348d798784a209b7db06f1c92f5428282aab8fd965190"
 						}
@@ -507,7 +507,7 @@
 
 				number = number / 1e18 * price * gasUsed
 				if (typeof Intl !== 'undefined') {
-					return new Intl.NumberFormat('en-US', { style: 'currency', currencyDisplay: 'narrowSymbol', currency: curr && curr !== "ETH" ? curr : "USD" }).format(number)
+					return new Intl.NumberFormat('en-US', { style: 'currency', currencyDisplay: 'narrowSymbol', currency: curr && curr !== "STRAX" ? curr : "USD" }).format(number)
 				}
 				return number.toFixed(2)
 			},
@@ -532,7 +532,7 @@
 						// console.log('gasnow data', response)
 						this.page = response;
 
-						document.title = (response.data.rapid / 1e9).toFixed(0) + "-" + (response.data.fast / 1e9).toFixed(0) + " GWei | Ethereum (ETH) Mainnet - GasNow - beacon.stratisevm.com - " + new Date().getFullYear();
+						document.title = (response.data.rapid / 1e9).toFixed(0) + "-" + (response.data.fast / 1e9).toFixed(0) + " GWei | Stratis (STRAX) Mainnet - GasNow - beacon.stratisevm.com - " + new Date().getFullYear();
 					}.bind(this));
 					this.updateIn = 5;
 					this.progress = 0;
@@ -575,7 +575,7 @@
 
       <div class="row">
         <div class="col-md-12">
-          <p><span class="fas fa-lightbulb mr-1"></span> INFO: This tool predicts the ETH gas price based on pending transactions in the ETH mempool. This method was pioneered by the now closed service 'GasNow'. An GasNow API compatible <a href="/api/v1/execution/gasnow">API endpoint</a> for this data is also available.</p>
+          <p><span class="fas fa-lightbulb mr-1"></span> INFO: This tool predicts the STRAX gas price based on pending transactions in the STRAX mempool. This method was pioneered by the now closed service 'GasNow'. An GasNow API compatible <a href="/api/v1/execution/gasnow">API endpoint</a> for this data is also available.</p>
         </div>
       </div>
 

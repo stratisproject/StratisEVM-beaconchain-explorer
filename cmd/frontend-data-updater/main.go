@@ -83,7 +83,7 @@ func main() {
 	}
 
 	logrus.Infof("initializing prices")
-	price.Init(utils.Config.Chain.ClConfig.DepositChainID, utils.Config.Eth1ErigonEndpoint, utils.Config.Frontend.ClCurrency, utils.Config.Frontend.ElCurrency)
+	price.Init(utils.Config.Chain.ClConfig.DepositChainID)
 
 	var rpcClient rpc.Client
 	chainID := new(big.Int).SetUint64(utils.Config.Chain.ClConfig.DepositChainID)

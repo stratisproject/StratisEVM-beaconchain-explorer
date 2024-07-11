@@ -1173,10 +1173,10 @@ func GetRates(selectedCurrency string) *types.Rates {
 	r.ClCurrencySymbol = price.GetCurrencySymbol(utils.Config.Frontend.ClCurrency)
 	r.TickerCurrencySymbol = price.GetCurrencySymbol(r.TickerCurrency)
 
-	r.MainCurrencyPrice = price.GetPrice(utils.Config.Frontend.MainCurrency, r.SelectedCurrency)
-	r.ClCurrencyPrice = price.GetPrice(utils.Config.Frontend.ClCurrency, r.SelectedCurrency)
-	r.ElCurrencyPrice = price.GetPrice(utils.Config.Frontend.ElCurrency, r.SelectedCurrency)
-	r.MainCurrencyTickerPrice = price.GetPrice(utils.Config.Frontend.MainCurrency, r.TickerCurrency)
+	r.MainCurrencyPrice = price.GetStratisPrice(r.SelectedCurrency)
+	r.ClCurrencyPrice = price.GetStratisPrice(r.SelectedCurrency)
+	r.ElCurrencyPrice = price.GetStratisPrice(r.SelectedCurrency)
+	r.MainCurrencyTickerPrice = price.GetStratisPrice(r.TickerCurrency)
 
 	r.MainCurrencyPriceFormatted = utils.FormatAddCommas(uint64(r.MainCurrencyPrice))
 	r.ClCurrencyPriceFormatted = utils.FormatAddCommas(uint64(r.ClCurrencyPrice))
@@ -1192,7 +1192,7 @@ func GetRates(selectedCurrency string) *types.Rates {
 	for _, c := range price.GetAvailableCurrencies() {
 		p := types.RatesPrice{}
 		p.Symbol = price.GetCurrencySymbol(c)
-		cPrice := price.GetPrice(utils.Config.Frontend.MainCurrency, c)
+		cPrice := price.GetStratisPrice(c)
 		p.RoundPrice = uint64(cPrice)
 		p.TruncPrice = utils.KFormatterEthPrice(uint64(cPrice))
 		r.MainCurrencyPrices[c] = p
@@ -1388,7 +1388,7 @@ func getGasNowData() (*types.GasNowPageData, error) {
 		logrus.WithError(err).Error("error updating gas now history")
 	}
 
-	gpoData.Data.Price = price.GetPrice(utils.Config.Frontend.ElCurrency, "USD")
+	gpoData.Data.Price = price.GetStratisPrice("USD")
 	gpoData.Data.Currency = "USD"
 
 	// gpoData.RapidUSD = gpoData.Rapid * 21000 * params.GWei / params.Ether * usd

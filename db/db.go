@@ -1650,7 +1650,7 @@ func UpdateQueueDeposits(tx *sqlx.Tx) error {
 		return err
 	}
 
-	// efficiently collect the tnx that pushed each validator over 32 ETH.
+	// efficiently collect the tnx that pushed each validator over 20000 STRAX.
 	_, err = tx.Exec(`
 		UPDATE validator_queue_deposits 
 		SET 
@@ -1677,8 +1677,8 @@ func UpdateQueueDeposits(tx *sqlx.Tx) error {
 			FROM CumSum
 			/* join so we can retrieve the validator index again */
 			left join validators on validators.pubkey = CumSum.publickey
-			/* we want the deposit that pushed the cum sum over 32 ETH */
-			WHERE cumTotal>=32000000000
+			/* we want the deposit that pushed the cum sum over 20000 STRAX */
+			WHERE cumTotal>=20000000000000
 			ORDER BY publickey, cumTotal asc 
 		) AS data
 		WHERE validator_queue_deposits.validatorindex=data.validatorindex`)

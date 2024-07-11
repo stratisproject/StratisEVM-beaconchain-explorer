@@ -132,7 +132,7 @@ func GetValidatorEarnings(validators []uint64, currency string) (*types.Validato
 		return nil, nil, err
 	}
 
-	clElPrice := price.GetPrice(utils.Config.Frontend.ClCurrency, utils.Config.Frontend.ElCurrency)
+	clElPrice := price.GetStratisPrice(utils.Config.Frontend.ElCurrency)
 
 	if totalDeposits == 0 {
 		totalDeposits = utils.Config.Chain.ClConfig.MaxEffectiveBalance * uint64(len(validators))
@@ -512,23 +512,23 @@ func GetCurrencySymbol(r *http.Request) string {
 func GetCurrentPrice(r *http.Request) uint64 {
 	cookie, err := r.Cookie("currency")
 	if err != nil {
-		return uint64(price.GetPrice(utils.Config.Frontend.MainCurrency, "USD"))
+		return uint64(price.GetStratisPrice("USD"))
 	}
 	if cookie.Value == utils.Config.Frontend.MainCurrency {
-		return uint64(price.GetPrice(utils.Config.Frontend.MainCurrency, "USD"))
+		return uint64(price.GetStratisPrice("USD"))
 	}
-	return uint64(price.GetPrice(utils.Config.Frontend.MainCurrency, cookie.Value))
+	return uint64(price.GetStratisPrice(cookie.Value))
 }
 
 func GetCurrentElPrice(r *http.Request) uint64 {
 	cookie, err := r.Cookie("currency")
 	if err != nil {
-		return uint64(price.GetPrice(utils.Config.Frontend.ElCurrency, "USD"))
+		return uint64(price.GetStratisPrice("USD"))
 	}
 	if cookie.Value == utils.Config.Frontend.ElCurrency {
-		return uint64(price.GetPrice(utils.Config.Frontend.ElCurrency, "USD"))
+		return uint64(price.GetStratisPrice("USD"))
 	}
-	return uint64(price.GetPrice(utils.Config.Frontend.ElCurrency, cookie.Value))
+	return uint64(price.GetStratisPrice(cookie.Value))
 }
 
 func GetCurrentPriceFormatted(r *http.Request) template.HTML {
@@ -768,7 +768,7 @@ func getExecutionChartData(indices []uint64, currency string, lowerBoundDay uint
 	}
 
 	// Now populate the chartData array using the dayRewardMap
-	exchangeRate := price.GetPrice(utils.Config.Frontend.ElCurrency, currency)
+	exchangeRate := price.GetStratisPrice(currency)
 	for day, reward := range dayRewardMap {
 		ts := float64(utils.DayToTime(day).Unix() * 1000)
 		chartData = append(chartData, &types.ChartDataPoint{

@@ -1086,6 +1086,10 @@ func GenerateRandomAPIKey() (string, error) {
 	return apiKeyBase64, nil
 }
 
+func ExchangeRateForCurrency(currency string) float64 {
+	return price.GetStratisPrice(currency)
+}
+
 // Glob walks through a directory and returns files with a given extension
 func Glob(dir string, ext string) ([]string, error) {
 	files := []string{}

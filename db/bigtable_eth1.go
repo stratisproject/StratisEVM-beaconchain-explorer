@@ -2588,7 +2588,7 @@ func (bigtable *Bigtable) GetAddressBlobTableData(address []byte, pageToken stri
 			utils.FormatInOutSelf(address, t.From, t.To),
 			utils.FormatAddressWithLimitsInAddressPageTable(address, t.To, toName, false, digitLimitInAddressPagesTable, nameLimitInAddressPagesTable, true),
 			utils.FormatBytesAmount(t.BlobGasPrice, "GWei", 6),
-			utils.FormatBytesAmount(t.BlobTxFee, "ETH", 6),
+			utils.FormatBytesAmount(t.BlobTxFee, "STRAX", 6),
 			len(t.BlobVersionedHashes),
 		}
 	}
@@ -3509,7 +3509,7 @@ func (bigtable *Bigtable) GetMetadataForAddress(address []byte, offset uint64, l
 
 				isNativeEth := bytes.Equal([]byte{0x00}, token)
 				if !isNativeEth {
-					// token is not ETH, check if token limit is reached
+					// token is not STRAX, check if token limit is reached
 					if tokenCount >= limit {
 						ret.ERC20TokenLimitExceeded = true
 						continue

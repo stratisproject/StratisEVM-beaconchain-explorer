@@ -82,7 +82,7 @@ func Eth1Token(w http.ResponseWriter, r *http.Request) {
 	_ = ethDiv
 	_ = tokenDiv
 
-	ethPriceUsd := decimal.NewFromFloat(price.GetPrice(utils.Config.Frontend.ElCurrency, "USD"))
+	ethPriceUsd := decimal.NewFromFloat(price.GetStratisPrice("USD"))
 	tokenPriceEth := decimal.NewFromBigInt(new(big.Int).SetBytes(metadata.Price), 0).DivRound(ethDiv, 18)
 	tokenPriceUsd := ethPriceUsd.Mul(tokenPriceEth).Mul(tokenDiv).DivRound(ethDiv, 18)
 	tokenSupply := decimal.NewFromBigInt(new(big.Int).SetBytes(metadata.TotalSupply), 0).DivRound(tokenDiv, 18)

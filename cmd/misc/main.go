@@ -63,6 +63,7 @@ var opts = struct {
 	Email               string
 	DryRun              bool
 	Yes                 bool
+	OnlyBigtable        bool
 }{}
 
 func main() {
@@ -90,6 +91,7 @@ func main() {
 	flag.StringVar(&opts.Columns, "columns", "", "Comma separated list of columns that should be affected by the command")
 	flag.StringVar(&opts.Email, "email", "", "Email of the user")
 	flag.BoolVar(&opts.Yes, "yes", false, "Answer yes to all questions")
+	flag.BoolVar(&opts.OnlyBigtable, "only-bigtable", false, "Export slot data only into bigtable and skip postgres")
 	dryRun := flag.String("dry-run", "true", "if 'false' it deletes all rows starting with the key, per default it only logs the rows that would be deleted, but does not really delete them")
 	versionFlag := flag.Bool("version", false, "Show version and exit")
 	verbosityFlag := flag.String("verbosity", "info", "Logging level: info, warn, error, debug, trace")
@@ -230,7 +232,7 @@ func main() {
 				logrus.Fatalf("error starting tx: %v", err)
 			}
 			for slot := epoch * utils.Config.Chain.ClConfig.SlotsPerEpoch; slot < (epoch+1)*utils.Config.Chain.ClConfig.SlotsPerEpoch; slot++ {
-				err = exporter.ExportSlot(rpcClient, slot, false, tx)
+				err = exporter.ExportSlot(rpcClient, slot, false, tx, opts.OnlyBigtable)
 
 				if err != nil {
 					tx.Rollback()
@@ -279,7 +281,7 @@ func main() {
 				logrus.Fatalf("error starting tx: %v", err)
 			}
 			for slot := epoch * utils.Config.Chain.ClConfig.SlotsPerEpoch; slot < (epoch+1)*utils.Config.Chain.ClConfig.SlotsPerEpoch; slot++ {
-				err = exporter.ExportSlot(rpcClient, slot, false, tx)
+				err = exporter.ExportSlot(rpcClient, slot, false, tx, false)
 
 				if err != nil {
 					tx.Rollback()

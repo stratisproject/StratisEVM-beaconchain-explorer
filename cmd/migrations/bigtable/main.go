@@ -248,7 +248,7 @@ func monitor(configPath string) {
 		for i := head.FinalizedEpoch; i <= head.HeadEpoch; i++ {
 			logrus.Infof("exporting epoch %v", i)
 			for slot := i * cfg.Chain.ClConfig.SlotsPerEpoch; i <= (i+1)*cfg.Chain.ClConfig.SlotsPerEpoch-1; i++ {
-				err := exporter.ExportSlot(rpcClient, slot, false, tx)
+				err := exporter.ExportSlot(rpcClient, slot, false, tx, false)
 				if err != nil {
 					logrus.Errorf("error exporting slot: %v", err)
 					tx.Rollback()

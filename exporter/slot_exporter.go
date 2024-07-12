@@ -41,7 +41,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 		if len(dbSlots) > 0 {
 			if dbSlots[0] != 0 {
 				logger.Infof("exporting genesis slot as it is missing in the database")
-				err := ExportSlot(client, 0, utils.EpochOfSlot(0) == head.HeadEpoch, tx)
+				err := ExportSlot(client, 0, utils.EpochOfSlot(0) == head.HeadEpoch, tx, false)
 				if err != nil {
 					return fmt.Errorf("error exporting slot %v: %w", 0, err)
 				}
@@ -61,7 +61,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 				if previousSlot != currentSlot-1 {
 					logger.Infof("slots between %v and %v are missing, exporting them", previousSlot, currentSlot)
 					for slot := previousSlot + 1; slot <= currentSlot-1; slot++ {
-						err := ExportSlot(client, slot, false, tx)
+						err := ExportSlot(client, slot, false, tx, false)
 
 						if err != nil {
 							return fmt.Errorf("error exporting slot %v: %w", slot, err)
@@ -79,7 +79,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			logger.Infof("db is empty, export genesis slot")
-			err := ExportSlot(client, 0, utils.EpochOfSlot(0) == head.HeadEpoch, tx)
+			err := ExportSlot(client, 0, utils.EpochOfSlot(0) == head.HeadEpoch, tx, false)
 			if err != nil {
 				return fmt.Errorf("error exporting slot %v: %w", 0, err)
 			}
@@ -93,7 +93,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 	if lastDbSlot != head.HeadSlot {
 		slotsExported := 0
 		for slot := lastDbSlot + 1; slot <= head.HeadSlot; slot++ { // export any new slots
-			err := ExportSlot(client, slot, utils.EpochOfSlot(slot) == head.HeadEpoch, tx)
+			err := ExportSlot(client, slot, utils.EpochOfSlot(slot) == head.HeadEpoch, tx, false)
 			if err != nil {
 				return fmt.Errorf("error exporting slot %v: %w", slot, err)
 			}
@@ -158,7 +158,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 				if err != nil {
 					return fmt.Errorf("error setting block %v as finalized (orphaned): %w", dbSlot.Slot, err)
 				}
-				err = ExportSlot(client, dbSlot.Slot, utils.EpochOfSlot(dbSlot.Slot) == head.HeadEpoch, tx)
+				err = ExportSlot(client, dbSlot.Slot, utils.EpochOfSlot(dbSlot.Slot) == head.HeadEpoch, tx, false)
 				if err != nil {
 					return fmt.Errorf("error exporting slot %v: %w", dbSlot.Slot, err)
 				}
@@ -194,7 +194,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 		} else { // check if a late slot has been proposed in the meantime
 			if len(dbSlot.BlockRoot) < 32 && header != nil { // we have no slot in the db, but the node has a slot, export it
 				logger.Infof("exporting new slot %v", dbSlot.Slot)
-				err := ExportSlot(client, dbSlot.Slot, utils.EpochOfSlot(dbSlot.Slot) == head.HeadEpoch, tx)
+				err := ExportSlot(client, dbSlot.Slot, utils.EpochOfSlot(dbSlot.Slot) == head.HeadEpoch, tx, false)
 				if err != nil {
 					return fmt.Errorf("error exporting slot %v: %w", dbSlot.Slot, err)
 				}
@@ -211,7 +211,7 @@ func RunSlotExporter(client rpc.Client, firstRun bool) error {
 
 }
 
-func ExportSlot(client rpc.Client, slot uint64, isHeadEpoch bool, tx *sqlx.Tx) error {
+func ExportSlot(client rpc.Client, slot uint64, isHeadEpoch bool, tx *sqlx.Tx, onlyBigtable bool) error {
 
 	isFirstSlotOfEpoch := slot%utils.Config.Chain.ClConfig.SlotsPerEpoch == 0
 	epoch := slot / utils.Config.Chain.ClConfig.SlotsPerEpoch
@@ -294,7 +294,7 @@ func ExportSlot(client rpc.Client, slot uint64, isHeadEpoch bool, tx *sqlx.Tx) e
 			return nil
 		})
 		// if we are exporting the head epoch, update the validator db table
-		if isHeadEpoch {
+		if !onlyBigtable && isHeadEpoch {
 			g.Go(func() error {
 				err := db.SaveValidators(epoch, block.Validators, client, 10000, tx)
 				if err != nil {
@@ -327,18 +327,20 @@ func ExportSlot(client rpc.Client, slot uint64, isHeadEpoch bool, tx *sqlx.Tx) e
 			return err
 		}
 
-		// save the epoch metadata to the database
-		err = db.SaveEpoch(epoch, block.Validators, client, tx)
-		if err != nil {
-			return fmt.Errorf("error saving epoch data: %w", err)
-		}
-
-		if epoch > 0 && epochParticipationStats != nil {
-			logger.Printf("updating epoch %v with participation rate %v", epoch, epochParticipationStats.GlobalParticipationRate)
-			err := db.UpdateEpochStatus(epochParticipationStats, tx)
-
+		if !onlyBigtable {
+			// save the epoch metadata to the database
+			err = db.SaveEpoch(epoch, block.Validators, client, tx)
 			if err != nil {
-				return err
+				return fmt.Errorf("error saving epoch data: %w", err)
+			}
+
+			if epoch > 0 && epochParticipationStats != nil {
+				logger.Printf("updating epoch %v with participation rate %v", epoch, epochParticipationStats.GlobalParticipationRate)
+				err := db.UpdateEpochStatus(epochParticipationStats, tx)
+
+				if err != nil {
+					return err
+				}
 			}
 		}
 
@@ -383,12 +385,14 @@ func ExportSlot(client rpc.Client, slot uint64, isHeadEpoch bool, tx *sqlx.Tx) e
 		return fmt.Errorf("error exporting proposal to bigtable for slot %v: %w", block.Slot, err)
 	}
 
-	// save the block data to the db
-	err = db.SaveBlock(block, false, tx)
-	if err != nil {
-		return fmt.Errorf("error saving slot to the db: %w", err)
+	if !onlyBigtable {
+		// save the block data to the db
+		err = db.SaveBlock(block, false, tx)
+		if err != nil {
+			return fmt.Errorf("error saving slot to the db: %w", err)
+		}
+		// time.Sleep(time.Second)
 	}
-	// time.Sleep(time.Second)
 
 	logger.WithFields(
 		logrus.Fields{

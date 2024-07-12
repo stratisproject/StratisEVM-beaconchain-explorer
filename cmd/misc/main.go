@@ -92,6 +92,7 @@ func main() {
 	flag.BoolVar(&opts.Yes, "yes", false, "Answer yes to all questions")
 	dryRun := flag.String("dry-run", "true", "if 'false' it deletes all rows starting with the key, per default it only logs the rows that would be deleted, but does not really delete them")
 	versionFlag := flag.Bool("version", false, "Show version and exit")
+	verbosityFlag := flag.String("verbosity", "info", "Logging level: info, warn, error, debug, trace")
 
 	statsPartitionCommand.ParseCommandOptions()
 	flag.Parse()
@@ -100,6 +101,19 @@ func main() {
 		fmt.Println(version.Version)
 		fmt.Println(version.GoVersion)
 		return
+	}
+
+	switch *verbosityFlag {
+	case "warn":
+		logrus.SetLevel(logrus.WarnLevel)
+	case "error":
+		logrus.SetLevel(logrus.ErrorLevel)
+	case "debug":
+		logrus.SetLevel(logrus.DebugLevel)
+	case "trace":
+		logrus.SetLevel(logrus.TraceLevel)
+	default:
+		logrus.SetLevel(logrus.InfoLevel)
 	}
 
 	opts.DryRun = *dryRun != "false"

@@ -1534,7 +1534,7 @@ func indexMissingBlocks(start uint64, end uint64, bt *db.Bigtable, client *rpc.E
 				}
 			}
 
-			indexOldEth1Blocks(block, block, 1, 1, "all", bt, client)
+			indexOldEth1Blocks(block, block, 50, 50, "all", bt, client)
 		}
 	}
 }

@@ -237,7 +237,8 @@ func GetValidatorEarnings(validators []uint64, currency string) (*types.Validato
 		validatorProposalData.ProposalEstimate = &nextSlotEstimate
 	}
 
-	currentDayClIncome := decimal.NewFromInt(int64(totalBalance - lastBalance - lastDeposits + lastWithdrawals)).Mul(decimal.NewFromInt(1e9))
+	// Subtract half of proposer reward withdrawn to MasterNode contract
+	currentDayClIncome := decimal.NewFromInt(int64(totalBalance - lastBalance - lastDeposits + lastWithdrawals - uint64(len(proposedToday)*30000000000))).Mul(decimal.NewFromInt(1e9))
 	incomeToday := types.ClEl{
 		El:    decimal.NewFromInt(0),
 		Cl:    currentDayClIncome.Mul(decimal.NewFromFloat(clElPrice)),

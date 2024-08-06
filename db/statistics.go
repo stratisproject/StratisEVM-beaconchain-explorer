@@ -202,8 +202,8 @@ func WriteValidatorStatisticsForDay(day uint64, client rpc.Client) error {
 		data.MissedSyncTotal = previousDayData.MissedSyncTotal + data.MissedSync
 		data.OrphanedSyncTotal = previousDayData.OrphanedSyncTotal + data.OrphanedSync
 
-		// calculate cl reward & update totals
-		data.ClRewardsGWei = data.EndBalance - previousDayData.EndBalance + data.WithdrawalsAmount - data.DepositsAmount
+		// calculate cl reward & update totals. Subtract half of block proposal rewards that is sent to MasterNode contract
+		data.ClRewardsGWei = data.EndBalance - previousDayData.EndBalance + data.WithdrawalsAmount - data.DepositsAmount - (data.ProposedBlocks * 30000000000)
 		data.ClRewardsGWeiTotal = previousDayData.ClRewardsGWeiTotal + data.ClRewardsGWei
 
 		// update el reward total

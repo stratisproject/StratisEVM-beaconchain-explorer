@@ -1407,13 +1407,13 @@ func calculateRewards(endEpoch uint64, bt *db.Bigtable) {
 	err := db.ReaderDb.Select(&validators, `
 	SELECT validatorindex
 	FROM validators
-	WHERE activationepoch <= $1 AND exitepoch <= $1
+	WHERE activationepoch <= $1 AND exitepoch > $1
 	`, endEpoch)
 	if err != nil {
 		logrus.Fatalf("error getting validator indexes: %v", err)
 		return
 	}
-	logrus.Info("Total validators till epoch [%v]: %v", endEpoch, len(validators))
+	logrus.Infof("Total validators till epoch [%v]: %v", endEpoch, len(validators))
 	hist, err := bt.GetValidatorIncomeDetailsHistory(validators, 0, uint64(endEpoch))
 	if err != nil {
 		logrus.Fatal(err)
@@ -1454,22 +1454,22 @@ func calculateRewards(endEpoch uint64, bt *db.Bigtable) {
 	rewards := attestationSourceReward + attestationTargetReward + proposerSlashingInclusionReward + proposerAttestationInclusionReward + proposerSyncInclusionRward + syncCommitteeReward + slashingReward
 	penalties := attestationSourcePenalty + attestationTargetPenalty + finalityDelayPenalty + syncCommitteePenalty + slashingPenalty
 
-	logrus.Infof("AttestationSourceReward: %d", attestationSourceReward)
-	logrus.Infof("AttestationTargetReward: %d", attestationTargetReward)
-	logrus.Infof("ProposerSlashingInclusionReward: %d", proposerSlashingInclusionReward)
-	logrus.Infof("ProposerAttestationInclusionReward: %d", proposerAttestationInclusionReward)
-	logrus.Infof("ProposerSyncInclusionReward: %d", proposerSyncInclusionRward)
-	logrus.Infof("SyncCommitteeReward: %d", syncCommitteeReward)
-	logrus.Infof("SlashingReward: %d", slashingReward)
-	logrus.Infof("Total rewards: %d", rewards)
+	logrus.Infof("AttestationSourceReward: %v", attestationSourceReward)
+	logrus.Infof("AttestationTargetReward: %v", attestationTargetReward)
+	logrus.Infof("ProposerSlashingInclusionReward: %v", proposerSlashingInclusionReward)
+	logrus.Infof("ProposerAttestationInclusionReward: %v", proposerAttestationInclusionReward)
+	logrus.Infof("ProposerSyncInclusionReward: %v", proposerSyncInclusionRward)
+	logrus.Infof("SyncCommitteeReward: %v", syncCommitteeReward)
+	logrus.Infof("SlashingReward: %v", slashingReward)
+	logrus.Infof("Total rewards: %v", rewards)
 	logrus.Info("\n")
 
-	logrus.Infof("AttestationSourcePenalty: %d", attestationSourcePenalty)
-	logrus.Infof("AttestationTargetPenalty: %d", attestationTargetPenalty)
-	logrus.Infof("FinalityDelayPenalty: %d", finalityDelayPenalty)
-	logrus.Infof("SyncCommitteePenalty: %d", syncCommitteePenalty)
-	logrus.Infof("SlashingPenalty: %d", slashingPenalty)
-	logrus.Infof("Total penalties: %d", penalties)
+	logrus.Infof("AttestationSourcePenalty: %v", attestationSourcePenalty)
+	logrus.Infof("AttestationTargetPenalty: %v", attestationTargetPenalty)
+	logrus.Infof("FinalityDelayPenalty: %v", finalityDelayPenalty)
+	logrus.Infof("SyncCommitteePenalty: %v", syncCommitteePenalty)
+	logrus.Infof("SlashingPenalty: %v", slashingPenalty)
+	logrus.Infof("Total penalties: %v", penalties)
 	logrus.Info("\n")
 
 	logrus.Infof("Total income: %d", rewards-penalties)

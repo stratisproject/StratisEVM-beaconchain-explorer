@@ -1413,12 +1413,7 @@ func calculateRewards(endEpoch uint64, bt *db.Bigtable) {
 		logrus.Fatalf("error getting validator indexes: %v", err)
 		return
 	}
-	logrus.Infof("Total validators till epoch [%v]: %v", endEpoch, len(validators))
-	hist, err := bt.GetValidatorIncomeDetailsHistory(validators, 0, uint64(endEpoch))
-	if err != nil {
-		logrus.Fatal(err)
-		return
-	}
+
 	attestationSourceReward := uint64(0)
 	attestationTargetReward := uint64(0)
 	proposerSlashingInclusionReward := uint64(0)
@@ -1433,21 +1428,37 @@ func calculateRewards(endEpoch uint64, bt *db.Bigtable) {
 	syncCommitteePenalty := uint64(0)
 	slashingPenalty := uint64(0)
 
-	for _, validator := range validators {
-		for _, rew := range hist[validator] {
-			attestationSourceReward += rew.AttestationSourceReward
-			attestationTargetReward += rew.AttestationTargetReward
-			proposerSlashingInclusionReward += rew.ProposerSlashingInclusionReward
-			proposerAttestationInclusionReward += rew.ProposerAttestationInclusionReward
-			proposerSyncInclusionRward += rew.ProposerSyncInclusionReward
-			syncCommitteeReward += rew.SyncCommitteeReward
-			slashingReward += rew.SlashingReward
+	batchSize := 100
+	for i := 0; i < int(endEpoch); i += batchSize + 1 {
+		upperBound := i + batchSize
+		if int(endEpoch) < upperBound {
+			upperBound = int(endEpoch)
+		}
 
-			attestationSourcePenalty += rew.AttestationSourcePenalty
-			attestationTargetPenalty += rew.AttestationTargetPenalty
-			finalityDelayPenalty += rew.FinalityDelayPenalty
-			syncCommitteePenalty += rew.SyncCommitteePenalty
-			slashingPenalty += rew.SlashingPenalty
+		logrus.Infof("Fetching validator income details history for epochs %v-%v", i, upperBound)
+
+		res, err := bt.GetValidatorIncomeDetailsHistory(validators, uint64(i), uint64(upperBound))
+		if err != nil {
+			logrus.Fatal(err)
+			return
+		}
+
+		for _, epochData := range res {
+			for _, rew := range epochData {
+				attestationSourceReward += rew.AttestationSourceReward
+				attestationTargetReward += rew.AttestationTargetReward
+				proposerSlashingInclusionReward += rew.ProposerSlashingInclusionReward
+				proposerAttestationInclusionReward += rew.ProposerAttestationInclusionReward
+				proposerSyncInclusionRward += rew.ProposerSyncInclusionReward
+				syncCommitteeReward += rew.SyncCommitteeReward
+				slashingReward += rew.SlashingReward
+
+				attestationSourcePenalty += rew.AttestationSourcePenalty
+				attestationTargetPenalty += rew.AttestationTargetPenalty
+				finalityDelayPenalty += rew.FinalityDelayPenalty
+				syncCommitteePenalty += rew.SyncCommitteePenalty
+				slashingPenalty += rew.SlashingPenalty
+			}
 		}
 	}
 

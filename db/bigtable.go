@@ -92,7 +92,7 @@ func InitBigtable(project, instance, chainId, redisAddress string) (*Bigtable, e
 			logger.Fatalf("unable to set bigtable emulator environment variable: %v", err)
 		}
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*5)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*30)
 	defer cancel()
 
 	poolSize := 50
@@ -105,7 +105,7 @@ func InitBigtable(project, instance, chainId, redisAddress string) (*Bigtable, e
 
 	rdc := redis.NewClient(&redis.Options{
 		Addr:        redisAddress,
-		ReadTimeout: time.Minute * 5,
+		ReadTimeout: time.Minute * 30,
 	})
 
 	if err := rdc.Ping(ctx).Err(); err != nil {

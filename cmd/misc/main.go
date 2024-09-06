@@ -1403,8 +1403,8 @@ func updateAPIKey(user uint64) error {
 }
 
 func calculateRewards(endEpoch uint64, bt *db.Bigtable) {
-	var indexes *[]int64
-	err := db.ReaderDb.Get(&indexes, `
+	validators := []uint64{}
+	err := db.ReaderDb.Select(&validators, `
 	SELECT validatorindex
 	FROM validators
 	WHERE activationepoch <= $1 AND exitepoch <= $1
@@ -1413,11 +1413,7 @@ func calculateRewards(endEpoch uint64, bt *db.Bigtable) {
 		logrus.Fatalf("error getting validator indexes: %v", err)
 		return
 	}
-	validators := make([]uint64, len(*indexes))
-	for idx, validator := range *indexes {
-		validators[idx] = uint64(validator)
-	}
-	logrus.Info("Total validators till epoch [%v]: %v", endEpoch, len(*indexes))
+	logrus.Info("Total validators till epoch [%v]: %v", endEpoch, len(validators))
 	hist, err := bt.GetValidatorIncomeDetailsHistory(validators, 0, uint64(endEpoch))
 	if err != nil {
 		logrus.Fatal(err)

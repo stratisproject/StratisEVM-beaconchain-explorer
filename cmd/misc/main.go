@@ -296,6 +296,8 @@ func main() {
 		}
 	case "debug-rewards":
 		compareRewards(opts.StartDay, opts.EndDay, opts.Validator, bt)
+	case "calculate-rewards":
+		calculateRewards(opts.EndEpoch, bt)
 	case "debug-blocks":
 		err = debugBlocks()
 	case "clear-bigtable":
@@ -1398,6 +1400,79 @@ func updateAPIKey(user uint64) error {
 	}
 
 	return nil
+}
+
+func calculateRewards(endEpoch uint64, bt *db.Bigtable) {
+	indexes := make([]uint64, 0)
+	err := db.ReaderDb.Get(&indexes, `
+	SELECT validatorindex
+	FROM validators
+	WHERE activationepoch <= $1 AND exitepoch <= $1
+	`, endEpoch)
+	if err != nil {
+		logrus.Fatal("error getting validator indexes: %v", err)
+		return
+	}
+	logrus.Info("Total validators till epoch [%v]: %v", endEpoch, len(indexes))
+	hist, err := bt.GetValidatorIncomeDetailsHistory(indexes, 0, uint64(endEpoch))
+	if err != nil {
+		logrus.Fatal(err)
+		return
+	}
+	attestationSourceReward := uint64(0)
+	attestationTargetReward := uint64(0)
+	proposerSlashingInclusionReward := uint64(0)
+	proposerAttestationInclusionReward := uint64(0)
+	proposerSyncInclusionRward := uint64(0)
+	syncCommitteeReward := uint64(0)
+	slashingReward := uint64(0)
+
+	attestationSourcePenalty := uint64(0)
+	attestationTargetPenalty := uint64(0)
+	finalityDelayPenalty := uint64(0)
+	syncCommitteePenalty := uint64(0)
+	slashingPenalty := uint64(0)
+
+	for _, validator := range indexes {
+		for _, rew := range hist[validator] {
+			attestationSourceReward += rew.AttestationSourceReward
+			attestationTargetReward += rew.AttestationTargetReward
+			proposerSlashingInclusionReward += rew.ProposerSlashingInclusionReward
+			proposerAttestationInclusionReward += rew.ProposerAttestationInclusionReward
+			proposerSyncInclusionRward += rew.ProposerSyncInclusionReward
+			syncCommitteeReward += rew.SyncCommitteeReward
+			slashingReward += rew.SlashingReward
+
+			attestationSourcePenalty += rew.AttestationSourcePenalty
+			attestationTargetPenalty += rew.AttestationTargetPenalty
+			finalityDelayPenalty += rew.FinalityDelayPenalty
+			syncCommitteePenalty += rew.SyncCommitteePenalty
+			slashingPenalty += rew.SlashingPenalty
+		}
+	}
+
+	rewards := attestationSourceReward + attestationTargetReward + proposerSlashingInclusionReward + proposerAttestationInclusionReward + proposerSyncInclusionRward + syncCommitteeReward + slashingReward
+	penalties := attestationSourcePenalty + attestationTargetPenalty + finalityDelayPenalty + syncCommitteePenalty + slashingPenalty
+
+	logrus.Infof("AttestationSourceReward: %d", attestationSourceReward)
+	logrus.Infof("AttestationTargetReward: %d", attestationTargetReward)
+	logrus.Infof("ProposerSlashingInclusionReward: %d", proposerSlashingInclusionReward)
+	logrus.Infof("ProposerAttestationInclusionReward: %d", proposerAttestationInclusionReward)
+	logrus.Infof("ProposerSyncInclusionReward: %d", proposerSyncInclusionRward)
+	logrus.Infof("SyncCommitteeReward: %d", syncCommitteeReward)
+	logrus.Infof("SlashingReward: %d", slashingReward)
+	logrus.Infof("Total rewards: %d", rewards)
+	logrus.Info("\n")
+
+	logrus.Infof("AttestationSourcePenalty: %d", attestationSourcePenalty)
+	logrus.Infof("AttestationTargetPenalty: %d", attestationTargetPenalty)
+	logrus.Infof("FinalityDelayPenalty: %d", finalityDelayPenalty)
+	logrus.Infof("SyncCommitteePenalty: %d", syncCommitteePenalty)
+	logrus.Infof("SlashingPenalty: %d", slashingPenalty)
+	logrus.Infof("Total penalties: %d", penalties)
+	logrus.Info("\n")
+
+	logrus.Infof("Total income: %d", rewards-penalties)
 }
 
 // Debugging function to compare Rewards from the Statistic Table with the onces from the Big Table

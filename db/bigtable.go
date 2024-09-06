@@ -2307,7 +2307,7 @@ func (bigtable *Bigtable) getValidatorIncomeDetailsHistoryV2(validators []uint64
 		startEpoch = 0
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*30)
 	defer cancel()
 
 	res := make(map[uint64]map[uint64]*itypes.ValidatorEpochIncome, len(validators))

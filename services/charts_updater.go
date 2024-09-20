@@ -130,7 +130,7 @@ func getChartsPageData() ([]*types.ChartsPageDataChart, error) {
 	// add charts if it is mainnet
 	if utils.Config.Chain.ClConfig.DepositChainID == 105105 {
 		ChartHandlers["total_supply"] = chartHandler{20, TotalEmissionChartData}
-		ChartHandlers["market_cap_chart_data"] = chartHandler{21, MarketCapChartData}
+		// ChartHandlers["market_cap_chart_data"] = chartHandler{21, MarketCapChartData}
 	}
 
 	wg := sync.WaitGroup{}

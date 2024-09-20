@@ -1683,11 +1683,12 @@ func WriteExecutionChartSeriesForDay(day int64) error {
 			}
 			totalGasUsed = totalGasUsed.Add(gasUsed)
 			totalBurned = totalBurned.Add(baseFee.Mul(gasUsed)).Add(totalBurnedBlob)
-			if blk.Number < 12244000 {
-				totalTips = totalTips.Add(gasUsed.Mul(gasPrice))
-			} else {
-				totalTips = totalTips.Add(gasUsed.Mul(tipFee))
-			}
+			totalTips = totalTips.Add(gasUsed.Mul(tipFee))
+			// if blk.Number < 12244000 {
+			// 	totalTips = totalTips.Add(gasUsed.Mul(gasPrice))
+			// } else {
+			// 	totalTips = totalTips.Add(gasUsed.Mul(tipFee))
+			// }
 		}
 		prevBlock = blk
 	}

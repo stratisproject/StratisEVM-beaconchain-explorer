@@ -8,7 +8,7 @@ require (
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/Gurpartap/storekit-go v0.0.0-20201205024111-36b6cd5c6a21
 	github.com/SergeevDmitry/eth-rewards v0.1.2-0.20240603134710-02e0dcb0ebc0
-	github.com/SergeevDmitry/eth.store v0.0.0-20240207181457-302d43d1f4b0
+	github.com/SergeevDmitry/eth.store v0.0.0-20241211135555-4808acca4341
 	github.com/alexedwards/scs/redisstore v0.0.0-20230217120314-6b1bedc0f08c
 	github.com/alexedwards/scs/v2 v2.5.0
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d

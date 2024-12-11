@@ -96,6 +96,8 @@ github.com/SergeevDmitry/eth-rewards v0.1.2-0.20240603134710-02e0dcb0ebc0 h1:SdZ
 github.com/SergeevDmitry/eth-rewards v0.1.2-0.20240603134710-02e0dcb0ebc0/go.mod h1:U/2G2qYOTfP3T7x4H9IwIlk7Fvl8Zja4KBXkpngZ194=
 github.com/SergeevDmitry/eth.store v0.0.0-20240207181457-302d43d1f4b0 h1:LXGXwkv8wVNHV7w8zNtz4gbruCjnx6X1l29xPQFOjDI=
 github.com/SergeevDmitry/eth.store v0.0.0-20240207181457-302d43d1f4b0/go.mod h1:n/jFGHLcgE6xijvG1Rq72BnWhzZY7C1oJOcYzsKqebo=
+github.com/SergeevDmitry/eth.store v0.0.0-20241211135555-4808acca4341 h1:qAQkJ8h72EWtvgRN2qPDDnO+9l/JlS5JlA2IqJr/7vU=
+github.com/SergeevDmitry/eth.store v0.0.0-20241211135555-4808acca4341/go.mod h1:n/jFGHLcgE6xijvG1Rq72BnWhzZY7C1oJOcYzsKqebo=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=

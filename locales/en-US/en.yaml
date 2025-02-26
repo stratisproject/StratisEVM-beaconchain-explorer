@@ -6,7 +6,7 @@ p1_text: 'The Ethereum Beacon Chain is currently undergoing genesis.
   <a href="https://github.com/sigp/lighthouse">Lighthouse</a>,
   <a href="https://github.com/PegaSysEng/teku">Teku</a>,
   <a href="https://github.com/status-im/nim-beacon-chain">Nimbus</a>.
-  Please visit the official <a href="https://launchpad.ethereum.org/">Launchpad</a>
+  Please visit the official <a href="https://launchpad.stratisevm.com/">Launchpad</a>
   for more information on how to deposit.'
 p2_title: "When is genesis reached?"
 p2_text:

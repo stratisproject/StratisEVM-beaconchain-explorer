@@ -22,10 +22,10 @@ var layoutTemplateFiles = []string{
 }
 
 func InitPageData(w http.ResponseWriter, r *http.Request, active, path, title string, mainTemplates []string) *types.PageData {
-	fullTitle := fmt.Sprintf("%v - %v - beacon.stratisevm.com - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
+	fullTitle := fmt.Sprintf("%v - %v - beacon.xertra.com - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
 
 	if title == "" {
-		fullTitle = fmt.Sprintf("%v - beacon.stratisevm.com - %v", utils.Config.Frontend.SiteName, time.Now().Year())
+		fullTitle = fmt.Sprintf("%v - beacon.xertra.com - %v", utils.Config.Frontend.SiteName, time.Now().Year())
 	}
 
 	isMainnet := utils.Config.Chain.ClConfig.ConfigName == "mainnet"
@@ -33,7 +33,7 @@ func InitPageData(w http.ResponseWriter, r *http.Request, active, path, title st
 	data := &types.PageData{
 		Meta: &types.Meta{
 			Title:       fullTitle,
-			Description: "beacon.stratisevm.com makes Ethereum accessible to non-technical end users",
+			Description: "beacon.xertra.com makes Ethereum accessible to non-technical end users",
 			Path:        path,
 			GATag:       utils.Config.Frontend.GATag,
 			NoTrack:     false,
@@ -109,9 +109,9 @@ func InitPageData(w http.ResponseWriter, r *http.Request, active, path, title st
 
 func SetPageDataTitle(pageData *types.PageData, title string) {
 	if title == "" {
-		pageData.Meta.Title = fmt.Sprintf("%v - beacon.stratisevm.com - %v", utils.Config.Frontend.SiteName, time.Now().Year())
+		pageData.Meta.Title = fmt.Sprintf("%v - beacon.xertra.com - %v", utils.Config.Frontend.SiteName, time.Now().Year())
 	} else {
-		pageData.Meta.Title = fmt.Sprintf("%v - %v - beacon.stratisevm.com - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
+		pageData.Meta.Title = fmt.Sprintf("%v - %v - beacon.xertra.com - %v", title, utils.Config.Frontend.SiteName, time.Now().Year())
 	}
 }
 
@@ -370,12 +370,12 @@ func createMenuItems(active string, isMain bool) []types.MainMenuItem {
 					Label: "Tools",
 					Links: []types.NavigationLink{
 						// {
-						// 	Label: "beacon.stratisevm.com App",
+						// 	Label: "beacon.xertra.com App",
 						// 	Path:  "/mobile",
 						// 	Icon:  "fa-mobile-alt",
 						// },
 						// {
-						// 	Label: "beacon.stratisevm.com Premium",
+						// 	Label: "beacon.xertra.com Premium",
 						// 	Path:  "/premium",
 						// 	Icon:  "fa-gem",
 						// },
@@ -421,7 +421,7 @@ func createMenuItems(active string, isMain bool) []types.MainMenuItem {
 						},
 						// {
 						// 	Label: "Knowledge Base",
-						// 	Path:  "https://kb.beacon.stratisevm.com",
+						// 	Path:  "https://kb.beacon.xertra.com",
 						// 	Icon:  "fa-external-link-alt",
 						// },
 						{
@@ -592,12 +592,12 @@ func createMenuItemsGnosis(active string, isMain bool) []types.MainMenuItem {
 					Label: "Tools",
 					Links: []types.NavigationLink{
 						// {
-						// 	Label: "beacon.stratisevm.com App",
+						// 	Label: "beacon.xertra.com App",
 						// 	Path:  "/mobile",
 						// 	Icon:  "fa-mobile-alt",
 						// },
 						// {
-						// 	Label: "beacon.stratisevm.com Premium",
+						// 	Label: "beacon.xertra.com Premium",
 						// 	Path:  "/premium",
 						// 	Icon:  "fa-gem",
 						// },
@@ -634,7 +634,7 @@ func createMenuItemsGnosis(active string, isMain bool) []types.MainMenuItem {
 						},
 						{
 							Label: "Knowledge Base",
-							Path:  "https://kb.beacon.stratisevm.com",
+							Path:  "https://kb.beacon.xertra.com",
 							Icon:  "fa-external-link-alt",
 						},
 						{

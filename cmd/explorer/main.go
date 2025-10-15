@@ -387,7 +387,7 @@ func main() {
 
 		if !utils.Config.Frontend.OnlyAPI {
 			if utils.Config.Frontend.SiteDomain == "" {
-				utils.Config.Frontend.SiteDomain = "beacon.stratisevm.com"
+				utils.Config.Frontend.SiteDomain = "beacon.xertra.com"
 			}
 
 			csrfBytes, err := hex.DecodeString(cfg.Frontend.CsrfAuthKey)

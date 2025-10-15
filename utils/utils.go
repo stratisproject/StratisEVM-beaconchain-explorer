@@ -432,7 +432,7 @@ func ReadConfig(cfg *types.Config, path string) error {
 	}
 
 	if cfg.Frontend.SiteBrand == "" {
-		cfg.Frontend.SiteBrand = "beacon.stratisevm.com"
+		cfg.Frontend.SiteBrand = "beacon.xertra.com"
 	}
 
 	if cfg.Chain.ClConfigPath == "" {
@@ -737,11 +737,11 @@ func ReadConfig(cfg *types.Config, path string) error {
 	}
 
 	if cfg.Frontend.SiteTitle == "" {
-		cfg.Frontend.SiteTitle = "Open Source Stratis Explorer"
+		cfg.Frontend.SiteTitle = "Open Source Xertra Explorer"
 	}
 
 	if cfg.Frontend.Keywords == "" {
-		cfg.Frontend.Keywords = "open source stratis block explorer, stratis block explorer, beacon chain explorer, stratis blockchain explorer"
+		cfg.Frontend.Keywords = "open source xertra block explorer, xertra block explorer, beacon chain explorer, xertra blockchain explorer"
 	}
 
 	if cfg.Chain.Id != 0 {
@@ -1209,8 +1209,8 @@ func TryFetchContractMetadata(address []byte) (*types.ContractMetadata, error) {
 // }
 
 func GetExplorerAPIBaseUrl(provideDefault bool) string {
-	const mainnetBaseUrl = "explorer.stratisevm.com"
-	const auroriaBaseUrl = "auroria.explorer.stratisevm.com"
+	const mainnetBaseUrl = "explorer.xertra.com"
+	const auroriaBaseUrl = "auroria.explorer.xertra.com"
 
 	// check config first
 	if len(Config.EtherscanAPIBaseURL) > 0 {
@@ -1219,7 +1219,7 @@ func GetExplorerAPIBaseUrl(provideDefault bool) string {
 
 	// check chain id
 	switch Config.Chain.ClConfig.DepositChainID {
-	case 105105: // Stratis
+	case 105105: // Xertra
 		return mainnetBaseUrl
 	case 205205: // Auroria
 		return auroriaBaseUrl

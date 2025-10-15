@@ -5,8 +5,8 @@ Highcharts.setOptions({
   },
   credits: {
     enabled: true,
-    href: "https://beacon.stratisevm.com",
-    text: "beacon.stratisevm.com",
+    href: "https://beacon.xertra.com",
+    text: "beacon.xertra.com",
     style: {
       color: "var(--body-color)",
     },

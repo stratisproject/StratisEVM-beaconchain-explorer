@@ -105,7 +105,7 @@
               <tbody>
                 {{ range .Data.PoolInfos }}
                   <tr>
-                    <td>{{ if eq .Name "STRAX.STORE" }}<a href="https://beacon.stratisevm.com/ethstore" target="_blank">{{ .Name }}®</a><sup>1</sup>{{ else }}{{ .Name }}{{ end }}</td>
+                    <td>{{ if eq .Name "STRAX.STORE" }}<a href="https://beacon.xertra.com/ethstore" target="_blank">{{ .Name }}®</a><sup>1</sup>{{ else }}{{ .Name }}{{ end }}</td>
                     <td>{{ if eq .Count -1 }}-{{ else }}{{ .Count }}{{ end }}</td>
                     <td>{{ formatPoolPerformance .AvgPerformance1d }} {{ if not (eq .Name "STRAX.STORE") }}{{ formatEthstoreComparison .Name .EthstoreComparison1d }}{{ end }}</td>
                     <td>{{ formatPoolPerformance .AvgPerformance7d }} {{ if not (eq .Name "STRAX.STORE") }}{{ formatEthstoreComparison .Name .EthstoreComparison7d }}{{ end }}</td>

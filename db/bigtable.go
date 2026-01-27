@@ -95,7 +95,7 @@ func InitBigtable(project, instance, chainId, redisAddress string) (*Bigtable, e
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*30)
 	defer cancel()
 
-	poolSize := 50
+	poolSize := 250
 	btClient, err := gcp_bigtable.NewClient(ctx, project, instance, option.WithGRPCConnectionPool(poolSize))
 	// btClient, err := gcp_bigtable.NewClient(context.Background(), project, instance)
 

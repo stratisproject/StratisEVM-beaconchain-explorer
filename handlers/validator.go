@@ -65,6 +65,19 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 	}{
 		Start: time.Now(),
 	}
+	defer func() {
+		logger.
+			WithField("BasicInfo", timings.BasicInfo).
+			WithField("Earnings", timings.Earnings).
+			WithField("Deposits", timings.Deposits).
+			WithField("Proposals", timings.Proposals).
+			WithField("Charts", timings.Charts).
+			WithField("Effectiveness", timings.Effectiveness).
+			WithField("Statistics", timings.Statistics).
+			WithField("SyncStats", timings.SyncStats).
+			WithField("Rocketpool", timings.Rocketpool).
+			Infof("Validator timings")
+	}()
 
 	w.Header().Set("Content-Type", "text/html")
 	vars := mux.Vars(r)
@@ -416,7 +429,9 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			timings.Earnings = time.Since(start)
 		}()
+		st := time.Now()
 		earnings, balances, err := GetValidatorEarnings([]uint64{index}, currency)
+		fmt.Println("EARNINGS", time.Since(st))
 		if err != nil {
 			return fmt.Errorf("error getting validator earnings: %w", err)
 		}
@@ -443,18 +458,23 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 			// if we are currently past the cappella fork epoch, we can calculate the withdrawal information
 
 			validatorSlice := []uint64{index}
+			st = time.Now()
 			withdrawalsCount, err := db.GetTotalWithdrawalsCount(validatorSlice)
+			fmt.Println("GetTotalWithdrawalsCount", time.Since(st))
 			if err != nil {
 				return fmt.Errorf("error getting validator withdrawals count from db: %w", err)
 			}
 			validatorPageData.WithdrawalCount = withdrawalsCount
+			st = time.Now()
 			lastWithdrawalsEpochs, err := db.GetLastWithdrawalEpoch(validatorSlice)
+			fmt.Println("GetLastWithdrawalEpoch", time.Since(st))
 			if err != nil {
 				return fmt.Errorf("error getting validator last withdrawal epoch from db: %w", err)
 			}
 			lastWithdrawalsEpoch := lastWithdrawalsEpochs[index]
-
+			st = time.Now()
 			blsChange, err := db.GetValidatorBLSChange(validatorPageData.Index)
+			fmt.Println("GetValidatorBLSChange", time.Since(st))
 			if err != nil {
 				return fmt.Errorf("error getting validator bls change from db: %w", err)
 			}
@@ -468,6 +488,7 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 			// only calculate the expected next withdrawal if the validator is eligible
 			isFullWithdrawal := validatorPageData.CurrentBalance > 0 && validatorPageData.WithdrawableEpoch <= validatorPageData.Epoch
 			isPartialWithdrawal := validatorPageData.EffectiveBalance == utils.Config.Chain.ClConfig.MaxEffectiveBalance && validatorPageData.CurrentBalance > utils.Config.Chain.ClConfig.MaxEffectiveBalance
+			st = time.Now()
 			if stats != nil && stats.LatestValidatorWithdrawalIndex != nil && stats.TotalValidatorCount != nil && validatorPageData.IsWithdrawableAddress && (isFullWithdrawal || isPartialWithdrawal) {
 				distance, err := GetWithdrawableCountFromCursor(validatorPageData.Epoch, validatorPageData.Index, *stats.LatestValidatorWithdrawalIndex)
 				if err != nil {
@@ -514,6 +535,7 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 					validatorPageData.NextWithdrawalRow = tableData
 				}
 			}
+			fmt.Println("loop", time.Since(st))
 		}
 		return nil
 	})

@@ -63,7 +63,9 @@ func GetValidatorEarnings(validators []uint64, currency string) (*types.Validato
 
 	g := errgroup.Group{}
 	g.Go(func() error {
+		st := time.Now()
 		latestBalances, err := db.BigtableClient.GetValidatorBalanceHistory(validators, latestFinalizedEpoch, latestFinalizedEpoch)
+		fmt.Println("GetValidatorBalanceHistory", time.Since(st))
 		if err != nil {
 			logger.Errorf("error getting validator balance data in GetValidatorEarnings: %v", err)
 			return err
@@ -87,16 +89,28 @@ func GetValidatorEarnings(validators []uint64, currency string) (*types.Validato
 
 	income := types.ValidatorIncomePerformance{}
 	g.Go(func() error {
+		st := time.Now()
+		defer func() {
+			fmt.Println("GetValidatorIncomePerformance", time.Since(st))
+		}()
 		return db.GetValidatorIncomePerformance(validators, &income)
 	})
 
 	var totalDeposits uint64
 	g.Go(func() error {
+		st := time.Now()
+		defer func() {
+			fmt.Println("GetTotalValidatorDeposits", time.Since(st))
+		}()
 		return db.GetTotalValidatorDeposits(validators, &totalDeposits)
 	})
 
 	var firstActivationEpoch uint64
 	g.Go(func() error {
+		st := time.Now()
+		defer func() {
+			fmt.Println("GetFirstActivationEpoch", time.Since(st))
+		}()
 		return db.GetFirstActivationEpoch(validators, &firstActivationEpoch)
 	})
 
@@ -105,25 +119,39 @@ func GetValidatorEarnings(validators []uint64, currency string) (*types.Validato
 	var lastBalance uint64
 	g.Go(func() error {
 		if lastExportedStatsErr == db.ErrNoStats {
+			st := time.Now()
 			err := db.GetValidatorActivationBalance(validators, &lastBalance)
+			fmt.Println("GetValidatorActivationBalance", time.Since(st))
 			if err != nil {
 				return err
 			}
 		} else {
+			st := time.Now()
 			err := db.GetValidatorBalanceForDay(validators, lastStatsDay, &lastBalance)
+			fmt.Println("GetValidatorBalanceForDay", time.Since(st))
 			if err != nil {
 				return err
 			}
 		}
+		st := time.Now()
 		err := db.GetValidatorDepositsForSlots(validators, firstSlot, lastSlot, &lastDeposits)
+		fmt.Println("GetValidatorDepositsForSlots", time.Since(st))
 		if err != nil {
 			return err
 		}
+		st = time.Now()
+		defer func() {
+			fmt.Println("GetValidatorWithdrawalsForSlots", time.Since(st))
+		}()
 		return db.GetValidatorWithdrawalsForSlots(validators, firstSlot, lastSlot, &lastWithdrawals)
 	})
 
 	proposals := []types.ValidatorProposalInfo{}
 	g.Go(func() error {
+		st := time.Now()
+		defer func() {
+			fmt.Println("GetValidatorPropsosals", time.Since(st))
+		}()
 		return db.GetValidatorPropsosals(validators, &proposals)
 	})
 

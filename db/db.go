@@ -3072,11 +3072,15 @@ func GetValidatorDepositsForSlots(validators []uint64, fromSlot uint64, toSlot u
 func GetValidatorWithdrawalsForSlots(validators []uint64, fromSlot uint64, toSlot uint64, withdrawals *uint64) error {
 	validatorsPQArray := pq.Array(validators)
 	return ReaderDb.Get(withdrawals, `
-		SELECT 
-			COALESCE(SUM(amount), 0) 
-		FROM blocks_withdrawals d
-		INNER JOIN blocks b ON b.blockroot = d.block_root AND b.status = '1' and b.slot >= $2 and b.slot <= $3        
-		WHERE validatorindex = ANY($1)
+		WITH w AS (
+			SELECT block_root, COALESCE(SUM(amount), 0) as amount
+			FROM blocks_withdrawals
+			WHERE validatorindex = ANY($1) and block_slot >= $2 and block_slot <= $3
+			GROUP BY 1
+		)
+		SELECT COALESCE(SUM(w.amount), 0)
+		FROM w
+		JOIN blocks b ON b.blockroot = w.block_root AND b.status = '1'
 	`, validatorsPQArray, fromSlot, toSlot)
 }
 
